@@ -1,0 +1,59 @@
+{
+  "name": "sgbprojoxxo",
+  "version": "1.0.0",
+  "description": "Interfaz Web para la Área de Herramientas de OXXO construido con React + Firebase",
+  "private": true,
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LxingA/OXXO.git"
+  },
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "LxingA",
+    "Marloy P. Harmoon Therdson",
+    "Akira Yuto Suzuki",
+    "Kevin Francisco Muñiz Herrera",
+    "Anethxa",
+    "Piwonga",
+    "Huesomovil",
+    "Policemod27",
+    "Service Otaku Comunity",
+    "SOComunity",
+    "ASFrike",
+    "IOPrinteo",
+    "SUDesign",
+    "Proyecto Global",
+    "Aplicaciones Globales",
+    "React",
+    "Firebase",
+    "Vite"
+  ],
+  "author": "LxingA",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LxingA/OXXO/issues"
+  },
+  "homepage": "https://github.com/LxingA/OXXO#readme",
+  "dependencies": {
+    "firebase": "^10.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react": "^4.1.1",
+    "eslint": "^8.53.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.4",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
+  }
+}
