@@ -7,9 +7,13 @@
 */
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
+import App from './app';
+import GlobalProvider from './ct/global';
 import Firebase from './lib/firestore';
 
 /** Inicializar la Aplicación OXXO Help Desk */
 Firebase()["then"](services => createRoot(document["getElementById"]("root") as HTMLElement)["render"](
-    <p>Hola Mundo</p>
+    <GlobalProvider firebase={services}>
+        <App />
+    </GlobalProvider>
 ));
