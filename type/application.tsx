@@ -9,7 +9,9 @@
 /** Definición del Objeto para la Información de la Aplicación */
 type Application = {
     /** Nombre de la Aplicación */
-    name: string
+    name: string,
+    /** Indicar sí en la Aplicación existe una Sesión Activa */
+    authentic: boolean
 };
 
 export default Application;

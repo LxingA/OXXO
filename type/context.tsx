@@ -7,11 +7,14 @@
 */
 import type {FirebaseServices} from './firestore';
 import type Application from './application';
+import type User from './user';
 
 /** Definición del Objeto para el Contexto Global de la Aplicación */
 export type Global = {
     /** Contenedor con los Objetos Inicializados de Firebase */
     firebase?: FirebaseServices,
     /** Información de la Aplicación */
-    application?: Application
+    application?: Application,
+    /** Información del Usuario en la Sesión Actual */
+    user?: User
 };

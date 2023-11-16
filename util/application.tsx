@@ -19,8 +19,10 @@ export default async function(state:React.Dispatch<React.SetStateAction<{} | nul
         /** Obtención de la Información  */
         general: (await getDoc(doc(client,"application","general")))
     };
-    const application = {};
-    if(reference["exists"]()){
+    const application = {
+        authentic: false
+    };
+    if(reference["general"]["exists"]()){
         const general = (reference["general"]["data"]()!);
         application["name"] = general["appName"];
         state(application);

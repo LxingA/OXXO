@@ -6,10 +6,11 @@
 @date 14/11/23 20:30
 */
 import * as React from 'react';
+import {onAuthStateChanged} from 'firebase/auth';
 import type {FirebaseServices} from '../type/firestore';
 import type {Global} from '../type/context';
 import type Application from '../type/application';
-import InitApplication from '../cb/application';
+import InitApplication from '../util/application';
 
 /** Referencía al Contexto para el Ambito Global de la Aplicación */
 export const Context = React["createContext"]<Global>({});
@@ -24,6 +25,10 @@ export default function({children,firebase}:{
     const [initialApplication,updateInitialApplication] = React["useState"]<{} | null>(null);
     React["useEffect"](() => {
         !initialApplication && InitApplication(updateInitialApplication,firebase["database"]);
+        initialApplication && onAuthStateChanged(firebase["authentication"],async context => {
+            if(context) updateInitialApplication(older => ({...older,application:{authentic:true}}));
+            else updateInitialApplication(older => ({...older,user:{},application:{authentic:false}}));
+        });
     });
     return initialApplication && (
         <Context.Provider value={{
