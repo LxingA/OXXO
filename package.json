@@ -40,6 +40,7 @@
   },
   "homepage": "https://github.com/LxingA/OXXO#readme",
   "dependencies": {
+    "aos": "^2.3.4",
     "firebase": "^10.6.0",
     "i18next": "^23.7.6",
     "react": "^18.2.0",
@@ -49,6 +50,7 @@
     "react-router-dom": "^6.18.0"
   },
   "devDependencies": {
+    "@types/aos": "^3.0.7",
     "@types/node": "^20.9.0",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",

@@ -5,7 +5,7 @@
 @description Configuración Inicial de la Aplicación
 @date 14/11/23 16:15
 */
-import * as React from 'react';
+import 'aos/dist/aos.css';
 import {createRoot} from 'react-dom/client';
 import {I18nextProvider} from 'react-i18next';
 import {QueryClientProvider} from 'react-query';
