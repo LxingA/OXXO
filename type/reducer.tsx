@@ -2,16 +2,16 @@
 @author LxingA
 @project OXXO
 @name Help Desk
-@description Prototipo para la Definción del Objeto de Entrada para el Reducedor de la Aplicación
-@date 15/11/23 22:00
+@description Definición del Prototipo para el Objeto de Entrada para los Disparadores de los Reducedores
+@date 16/11/23 21:30
 */
 
-/** Objeto Inicial para los Callback de los Reducedores */
-type Input = {
+/** Prototipo para la Definición del Objeto para la Entrada de los Reducedores */
+type ReducerInput = {
     /** Valor a Mutar en el Estado */
-    payload: any,
-    /** Tipo de Ejecución en el Contexto del Reducedor */
+    payload?: any,
+    /** Nombre del Callback para Realizar la Acción de la Mutación */
     type: string
 };
 
-export default Input;
+export default ReducerInput;

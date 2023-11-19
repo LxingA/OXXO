@@ -1,12 +1,60 @@
 {
     "en": {
         "translation": {
-
+            "SLangAppTranslationLanguageLabelEN": "English",
+            "SLangAppTranslationLanguageLabelES": "Spanish",
+            "SLangAppTranslationViewLoginIndexTitle": "Application Access",
+            "SLangAppTranslationViewLoginAuthTitle": "Authentication",
+            "SLangAppTranslationViewLoginRecoveryTitle": "Access Recovery",
+            "SLangAppTranslationViewLoginRecoveryButtonLabel": "Request Recovery|Requesting...",
+            "SLangAppTranslationViewLoginRecoveryAuthenticMessage": "¿Have you already remembered your password?",
+            "SLangAppTranslationViewLoginRecoveryAuthenticAlt": "Authenticate",
+            "SLangAppTranslationViewLoginIndexDescription": "Your site to manage,<br/> track and report orders.",
+            "SLangAppTranslationViewLoginFormInputUserLabel": "Email",
+            "SLangAppTranslationViewLoginFormInputUserHolder": "Please enter your email",
+            "SLangAppTranslationViewLoginFormInputPassLabel": "Access Password",
+            "SLangAppTranslationViewLoginFormInputPassHolder": "Please write your access password",
+            "SLangAppTranslationViewLoginFormSuggestResetMessage": "¿Have you forgotten your access password?",
+            "SLangAppTranslationViewLoginFormSuggestResetAlt": "Recover It",
+            "SLangAppTranslationViewLoginFormSuggestRegisterMessage": "¿Not a member yet?",
+            "SLangAppTranslationViewLoginFormSuggestRegisterAlt": "Register",
+            "SLangAppTranslationViewLoginFormButtonSubmitLabel": "Identify|Identifying...",
+            "SLangAppTranslationViewLoginSliderTitle": "Order Consultant|Incident Tracking|Order Authorization",
+            "SLangAppTranslationViewLoginSliderMessage": "You will be able to track the status of an order live using its order number|You will be able to follow up on any reported incident|You will be able to authorize orders that exceed a certain number of kits",
+            "SLangAppTranslationViewLoginFormSubmitCodeError_INVALID_LOGIN_CREDENTIALS": "Sorry, your credentials are not correct. Please verify your credentials and try again",
+            "SLangAppTranslationViewLoginFormSubmitCodeError_UNKNOWN_ERROR": "There was an unknown error while identifying you. Please contact the Developer",
+            "SLangAppTranslationViewPanelPageIndexTitle": "Dashboard",
+            "SLangAppTranslationViewPanelPageTrackTitle": "Consultant",
+            "SLangAppTranslationViewPanelNavbarGreetingLabel": "Hi"
         }
     },
     "es": {
         "translation": {
-            
+            "SLangAppTranslationLanguageLabelES": "Español",
+            "SLangAppTranslationLanguageLabelEN": "Inglés",
+            "SLangAppTranslationViewLoginIndexTitle": "Acceso a la Aplicación",
+            "SLangAppTranslationViewLoginAuthTitle": "Autenticación",
+            "SLangAppTranslationViewLoginRecoveryTitle": "Recuperación de Acceso",
+            "SLangAppTranslationViewLoginRecoveryButtonLabel": "Solicitar la Recuperación|Solicitando...",
+            "SLangAppTranslationViewLoginRecoveryAuthenticMessage": "¿Ya te acordaste de tú contraseña?",
+            "SLangAppTranslationViewLoginRecoveryAuthenticAlt": "Autenticate",
+            "SLangAppTranslationViewLoginIndexDescription": "Tú sitio para administrar,<br/> rastrear y reportar los pedidos.",
+            "SLangAppTranslationViewLoginFormInputUserLabel": "Correo Electrónico",
+            "SLangAppTranslationViewLoginFormInputUserHolder": "Favor de ingresar su correo electrónico",
+            "SLangAppTranslationViewLoginFormInputPassLabel": "Contraseña de Acceso",
+            "SLangAppTranslationViewLoginFormInputPassHolder": "Favor de escribir su contraseña de acceso",
+            "SLangAppTranslationViewLoginFormSuggestResetMessage": "¿Has olvidado la contraseña de acceso?",
+            "SLangAppTranslationViewLoginFormSuggestResetAlt": "Recupérala",
+            "SLangAppTranslationViewLoginFormSuggestRegisterMessage": "¿No eres miembro aún?",
+            "SLangAppTranslationViewLoginFormSuggestRegisterAlt": "Registrate",
+            "SLangAppTranslationViewLoginFormButtonSubmitLabel": "Identificate|Identificando...",
+            "SLangAppTranslationViewLoginSliderTitle": "Consultor de Pedidos|Seguimiento a Incidencias|Autorización de Pedidos",
+            "SLangAppTranslationViewLoginSliderMessage": "Podrás rastrear en vivo el estatus de un pedido mediante su número de orden|Podrás darle un seguimiento a cualquier incidencia reportada|Podrás autorizar los pedidos que superen una determinada cantidad de kit's",
+            "SLangAppTranslationViewLoginFormSubmitCodeError_INVALID_LOGIN_CREDENTIALS": "Lo sentimos, tus credenciales no son las correctas. Verifica tus credenciales y intentalo de nuevo",
+            "SLangAppTranslationViewLoginFormSubmitCodeError_UNKNOWN_ERROR": "Hubo un error desconocido a identificarte. Favor de contactar con el Desarrollador",
+            "SLangAppTranslationViewPanelPageIndexTitle": "Tablero",
+            "SLangAppTranslationViewPanelPageTrackTitle": "Consultor",
+            "SLangAppTranslationViewPanelNavbarGreetingLabel": "Hola"
         }
     }
 }

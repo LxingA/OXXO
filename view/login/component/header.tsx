@@ -2,29 +2,22 @@
 @author LxingA
 @project OXXO
 @name Help Desk
-@description Componente con la Cabecera Principal de la Vista de Autenticación
-@date 15/11/23 22:00
+@description Componente con la Cabecera de la Vista de Autenticación
+@date 17/11/23 09:00
 */
 import {useContext} from 'react';
-import {Link} from 'react-router-dom';
-import {Context} from '../../../context/global';
-import AddonOptions from '../addon/headerOptions';
+import {Context} from '../../../context/service';
+import {Logo,Option} from '../addon/header';
 
 /** Componente con la Cabecera de la Vista de Autenticación */
 const Header = () => {
-    const Global = useContext(Context);
+    const {asset,application,dispatcher} = useContext(Context);
     return (
         <div className="NavForm">
-            <div className="col1">
-                <Link to="/">
-                    <img src={Global["application"]?.logo[(Global["application"]?.dark ? "dark" : "white")] as string}/>
-                </Link>
-            </div>
-            <div className="col2">
-                <AddonOptions />
-            </div>
+            <Logo path={asset!.logo![application?.dark ? "light" : "color"]}/>
+            <Option state={application!.dark} dispatch={dispatcher!}/>
         </div>
-    );
+    )
 };
 
 export default Header;

@@ -2,27 +2,22 @@
 @author LxingA
 @project OXXO
 @name Help Desk
-@description Prototipo para la Definición del Objeto para la Aplicación
-@date 14/11/23 21:30
+@description Definición del Prototipo para la Información General de la Aplicación
+@date 16/11/23 19:30
 */
 
-/** Definición del Objeto para la Información de la Aplicación */
+/** Prototipo para la Definición del Objeto con la Información de la Aplicación */
 type Application = {
     /** Nombre de la Aplicación */
     name: string,
-    /** Indicar sí en la Aplicación existe una Sesión Activa */
-    authentic: boolean,
-    /** Indicar sí en la Aplicación está en Modo Obscuro */
+    /** Indicar sí se Inicialicé con el Modo Obscuro */
     dark: boolean,
-    /** Contenedor con el Logo Principal y Global en Formato HTTP */
-    logo: {
-        /** Ruta Absoluta HTTP del Logo en Color */
-        color: string,
-        /** Ruta Absoluta HTTP del Logo en Negro */
-        dark: string,
-        /** Ruta Absoluta HTTP del Logo en Blanco */
-        white: string
-    }
+    /** Establecer el Idioma Predeterminado */
+    language: "es" | "en",
+    /** Correo Electrónico de Contacto */
+    mail: string,
+    /** Nombre del Cliente */
+    client: string
 };
 
 export default Application;

@@ -2,21 +2,23 @@
 @author LxingA
 @project OXXO
 @name Help Desk
-@description Plantilla para Determinar cuando el Usuario se ha Autenticado en la Aplicación
-@date 15/11/23 23:00
+@description Plantilla para la Verificación de la Sesión en la Aplicación
+@date 17/11/23 00:00
 */
-import {useContext} from 'react';
-import {Context} from '../context/global';
-import type {ReactNode} from 'react';
-import ViewLogin from '../view/login';
+import {ReactNode,useContext} from 'react';
+import {Context} from '../context/auth';
+import {Navigate,useLocation} from 'react-router-dom';
 
-const Authentication = ({children}:{
+/** Plantilla para la Verificación de la Sesión en la Aplicación */
+const Auth = ({children}:{
+    /** Referencía al Hijo DOM de la Plantilla */
     children: ReactNode
 }) => {
-    const Global = useContext(Context);
-    return (Global["application"]?.authentic) ? (
-        children
-    ) : <ViewLogin />;
+    const {state} = useContext(Context);
+    const {pathname} = useLocation();
+    return state ? children : (
+        <Navigate to={`/auth?continue=${encodeURIComponent(pathname)}`} replace/>
+    );
 };
 
-export default Authentication;
+export default Auth;
