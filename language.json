@@ -62,7 +62,8 @@
             "SLangAppTranslationViewActionPageDoRecoverEmailTitle": "Email Reset",
             "SLangAppTranslationViewActionPageDoResetPasswordTitle": "Password Reset",
             "SLangAppTranslationViewActionPageDoVerifyEmailTitle": "Email Verification",
-            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessMessage": "¡Email has been successfully verified!"
+            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessMessage": "¡Email has been successfully verified!",
+            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessTitle": "Correct Verification"
         }
     },
     "es": {
@@ -128,7 +129,8 @@
             "SLangAppTranslationViewActionPageDoRecoverEmailTitle": "Restablecimiento del Correo Electrónico",
             "SLangAppTranslationViewActionPageDoVerifyEmailTitle": "Verificación del Correo Electrónico",
             "SLangAppTranslationViewActionPageDoReauthUserTitle": "Reautenticación de una Cuenta",
-            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessMessage": "¡Se ha verificado con éxito el correo electrónico!"
+            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessMessage": "¡Se ha verificado con éxito el correo electrónico!",
+            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessTitle": "Verificación Correcta"
         }
     }
 }

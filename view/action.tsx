@@ -43,7 +43,7 @@ const Element = {
                     <i className="uil uil-check Mainh3"></i>
                 )}
                 <h3>
-                    {loading ? label : "dsdsdsds"}
+                    {loading ? label : t("SLangAppTranslationViewActionPageDoVerifyEmailSuccessTitle")}
                 </h3>
                 {!loading && (
                     <Fragment>

@@ -13,7 +13,7 @@ type Application = {
     /** Indicar sí se Inicialicé con el Modo Obscuro */
     dark: boolean,
     /** Establecer el Idioma Predeterminado */
-    language: "es" | "en",
+    language: "es" | "en" | "auto",
     /** Correo Electrónico de Contacto */
     mail: string,
     /** Nombre del Cliente */

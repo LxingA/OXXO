@@ -15,7 +15,11 @@ import type ApplicationPrototype from '../type/application';
  * @param state Objeto de Referencía para Definir el Objeto Final
  */
 export const initialObjectApplication = (state?: {}): ApplicationPrototype => {
-    return state ? ({...state} as ApplicationPrototype) : ({
+    if(state){
+        state["dark"] = (state["dark"] == "auto") ? window["matchMedia"]("(prefers-color-scheme:dark)")["matches"] : state["dark"];
+        state["language"] = (state["language"] == "auto") ? navigator["language"] : state["language"];
+        return (state as ApplicationPrototype);
+    }else return ({
         name: "Help Desk",
         dark: false,
         language: "es",
