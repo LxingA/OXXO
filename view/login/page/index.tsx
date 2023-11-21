@@ -5,7 +5,7 @@
 @description Página Predeterminada para la Vista de la Autenticación
 @date 17/11/23 11:50
 */
-import {useContext,Fragment,useState} from 'react';
+import {useContext,Fragment,useState,useEffect} from 'react';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {Context as Service} from '../../../context/service';
 import {Input,Suggest,Dialog} from '../addon/form';
@@ -50,6 +50,11 @@ const Home = () => {
             }
         }
     };
+    useEffect(() => {
+        const callback = (k => (k["code"] === "Enter" && (value["osoxxo_input_login_user"]["value"] && value["osoxxo_input_login_pass"]["value"])) && SetSession());
+        window["addEventListener"]("keydown",callback,true);
+        return () => window["removeEventListener"]("keydown",callback,true);
+    });
     return (
         <Fragment>
             <h3>

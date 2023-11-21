@@ -36,7 +36,23 @@ type Auth = {
     /** Referencía a la Instancía para realizar el Callback en la Mutación del Objeto */
     dispatcher?: Dispatch<Input>,
     /** Contenedor con la Información General de un Usuario */
-    user?: User
+    user?: User | null,
+    /** Contenedor con la Información Adicional del Usuario */
+    information?: {
+        /** Establecer el Usuario con Permisos de Administración */
+        administrator?: boolean,
+        /** Establecer un Rol Inicial al Usuario */
+        role?: "codeink" | "xink" | "oxxo",
+        /** Contenedor con Preferencías para una Mejor Experiencia de Usuario */
+        preference?: {
+            /** Establecer el Tema Predeterminado para el Usuario */
+            dark: boolean,
+            /** Establecer el Idioma Predeterminado para el Usuario */
+            language: "es" | "en"
+        },
+        /** Rol Asignado al Usuario pero Titulado */
+        title?: string
+    }
 };
 
 export default Auth;

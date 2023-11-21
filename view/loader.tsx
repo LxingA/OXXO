@@ -7,17 +7,16 @@
 */
 import {useContext} from 'react';
 import {Context as Service} from '../context/service';
+import Domain from '../util/domain';
 
 /** Componente Global para la Vista de Carga de la Aplicación */
 const Loader = () => {
-    const {application,asset} = useContext(Service);
+    const {application} = useContext(Service);
     return (
-        <div className="maincontent">
-            <div className="LoadingBox">
-                <div className="ctn">
-                    <img className="animate__pulse" src={asset!["logo"][application!["dark"] ? "dark" : "light"]}/>
-                    <div className="loader"></div>
-                </div>
+        <div className="LoadingBox">
+            <div className="ctn">
+                <img className="animate__pulse" src={Domain(application?.dark ? "logo/dark.webp" : "logo/light.webp")}/>
+                <div className="loader"></div>
             </div>
         </div>
     );

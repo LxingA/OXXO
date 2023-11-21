@@ -12,13 +12,14 @@ import {Context as Service} from '../../context/service';
 import {useTranslation} from 'react-i18next';
 import ComponentHeader from './component/header';
 import ComponentSlider from './component/slider';
+import Domain from '../../util/domain';
 
 /** Vista Principal de la Autenticación */
 const Index = () => {
     const [query] = useSearchParams();
     const {pathname,search} = useLocation();
     const {state} = useContext(Authentication);
-    const {application,asset} = useContext(Service);
+    const {application} = useContext(Service);
     const {t} = useTranslation();
     useEffect(() => {
         const name = `${application?.client} ${application?.name}`;
@@ -63,8 +64,8 @@ const Index = () => {
                                 </Link>
                             </div>
                             <div className="ctnImg">
-                                <img src={asset?.home["cover"]} className="img1" data-aos="fade-up" data-aos-duration="1000"/>
-                                <img src={asset?.home["background"]} className="img2" data-aos="fade-left" data-aos-duration="1000"/>
+                                <img src={Domain("login/home/cover.webp")} className="img1" data-aos="fade-up" data-aos-duration="1000"/>
+                                <img src={Domain("login/home/background.webp")} className="img2" data-aos="fade-left" data-aos-duration="1000"/>
                             </div>
                         </div>
                     </div>

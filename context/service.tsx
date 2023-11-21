@@ -8,6 +8,7 @@
 import {createContext,useReducer,ReactNode,useLayoutEffect,useEffect} from 'react';
 import Animate from 'aos';
 import DOM from '../util/element';
+import Domain from '../util/domain';
 import type Input from '../type/reducer';
 import type ServicePrototype from '../type/service';
 
@@ -41,7 +42,7 @@ export default function({children,service}:{
     useLayoutEffect(() => {
         DOM({
             rel: "icon",
-            href: service["asset"]?.icon?.normal,
+            href: Domain("favicon.ico"),
             type: "image/x-icon",
             id: "favicon"
         },document);

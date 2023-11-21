@@ -6,7 +6,7 @@
 @date 18/11/23 13:00
 */
 import {signOut} from 'firebase/auth';
-import {NavLink} from 'react-router-dom';
+import {NavLink,Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import type {Auth} from 'firebase/auth';
 
@@ -31,10 +31,12 @@ export const PhotoCircle = ({userDefault,userPhoto}:{
 }) => {
     return (
         <div className="ctnUserMini">
-            <div className="iconUser">
-                <img src={userPhoto ?? userDefault}/>
-            </div>
-            <div className="CircleStatusConexion"></div>
+            <Link to={{pathname:"/account"}}>
+                <div className="iconUser">
+                    <img src={userPhoto ?? userDefault}/>
+                </div>
+                <div className="CircleStatusConexion"></div>
+            </Link>
         </div>
     );
 };
@@ -50,10 +52,22 @@ export const Navbar = () => {
                     {t("SLangAppTranslationViewPanelPageIndexTitle")}
                 </span>
             </NavLink>
-            <NavLink to="/track">
-                <i className="uil uil-clipboard-notes"></i>
+            <NavLink to="/order_view">
+                <i className="uil uil-file-search-alt"></i>
                 <span>
-                    {t("SLangAppTranslationViewPanelPageTrackTitle")}
+                    {t("SLangAppTranslationViewPanelPageViewTitle")}
+                </span>
+            </NavLink>
+            <NavLink to="/order_check">
+                <i className="uil uil-file-check"></i>
+                <span>
+                    {t("SLangAppTranslationViewPanelPageCheckTile")}
+                </span>
+            </NavLink>
+            <NavLink to="/order_incident">
+                <i className="uil uil-analysis"></i>
+                <span>
+                    {t("SLangAppTranslationViewPanelPageIncidentTitle")}
                 </span>
             </NavLink>
         </div>

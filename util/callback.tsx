@@ -5,7 +5,9 @@
 @description Utilidades para Realizar Acciones de Forma Reutilizable
 @date 16/11/23 20:00
 */
+import {getDoc,doc,collection} from 'firebase/firestore';
 import type {Authentication} from '../type/auth';
+import type {Firestore} from 'firebase/firestore';
 import type ApplicationPrototype from '../type/application';
 
 /**
@@ -38,4 +40,21 @@ export const initialObjectAuthentication = (state?: {}): Authentication => {
             max: 50
         }
     } as Authentication);
+};
+
+/**
+ * Funcionalidad para la Definición del Objeto con la Información Adicional de un Usuario
+ * @param object Referencía al Objeto a Mutar para la Definición del Objeto Final
+ * @param client Referencía al Instancia de Firebase Firestore
+ * @param uuid Identificador Único del Usuario a Consultar
+ */
+export const defineUserInformationObject = async(object:{},client:Firestore,uuid:string) => {
+    const getInformationFromDatabase = (await getDoc(doc(collection(client,"user"),uuid)));
+    if(getInformationFromDatabase["exists"]()){
+        const savedDataFromQueryDatabase = getInformationFromDatabase["data"]()!;
+        object["administrator"] = savedDataFromQueryDatabase["administrator"];
+        object["role"] = savedDataFromQueryDatabase["role"];
+        object["title"] = savedDataFromQueryDatabase["title"];
+        return object;
+    }else return object;
 };

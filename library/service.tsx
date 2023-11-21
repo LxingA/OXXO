@@ -8,11 +8,12 @@
 import {initializeApp} from 'firebase/app';
 import {initializeAppCheck} from 'firebase/app-check';
 import {ReCaptchaV3Provider} from 'firebase/app-check';
-import {getStorage,listAll,ref,getDownloadURL} from 'firebase/storage';
+import {getStorage} from 'firebase/storage';
 import {getAuth} from 'firebase/auth';
+import {getDatabase} from 'firebase/database';
 import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager} from 'firebase/firestore';
 import {doc,collection,getDocFromCache,getDocFromServer} from 'firebase/firestore';
-import {initialObjectApplication,initialObjectAuthentication} from '../util/callback';
+import {initialObjectApplication,initialObjectAuthentication,defineUserInformationObject} from '../util/callback';
 import type {FirebaseOptions} from 'firebase/app';
 import type Service from '../type/service';
 
@@ -23,7 +24,8 @@ const configuration: FirebaseOptions = {
     projectId: import.meta.env.SGlobAppParamFirestoreProjectID,
     authDomain: import.meta.env.SGlobAppParamFirestoreAuthDomain,
     storageBucket: import.meta.env.SGlobAppParamFirestoreStorageDomain,
-    messagingSenderId: import.meta.env.SGlobAppParamFirestoreMessagingSenderID
+    messagingSenderId: import.meta.env.SGlobAppParamFirestoreMessagingSenderID,
+    databaseURL: import.meta.env.SGlobAppParamRealTimeDatabaseDomain
 };
 
 /** Funcionalidad Inicial para la Definición del Objeto Global para la Aplicación */
@@ -37,11 +39,15 @@ const Initial = async(): Promise<Service> => {
             tabManager: persistentMultipleTabManager()
         })
     });
+    /** Instanciar la Autenticación de Firebase para la Aplicación */
+    const authentication = getAuth(app);
+    authentication["useDeviceLanguage"]();
     /** Contenedor con los Servicios Instanciados de Firebase para la Aplicación */
     let initialState: Service = {
         firebase: {
             storage: getStorage(app),
-            authentication: getAuth(app),
+            realtime: getDatabase(app),
+            authentication,
             database
         }
     };
@@ -67,34 +73,12 @@ const Initial = async(): Promise<Service> => {
         if(getAuthInformationFromServer["exists"]()) initialState["authentication"] = initialObjectAuthentication(getAuthInformationFromServer["data"]());
         else initialState["authentication"] = initialObjectAuthentication();
     }
-    /** Obtener y Definir el Objeto de los Recursos de la Aplicación */
-    let files = {};
-    (await Promise["all"](
-        (await listAll(ref(initialState["firebase"]?.storage!,"a")))["items"]["map"](async ({name,fullPath,storage}) => {
-            files[name] = (await getDownloadURL(ref(storage,fullPath)));
-        })
-    ));
-    initialState["asset"] = {
-        logo: {
-            dark: files["3c589326-d2c5-4e74-8810-76d5a3e04670-d.webp"],
-            color: files["3c589326-d2c5-4e74-8810-76d5a3e04670-c.webp"],
-            light: files["3c589326-d2c5-4e74-8810-76d5a3e04670-w.webp"]
-        },
-        style: files["70d2e425-0015-406b-b749-67276b5ca454.css"],
-        icon: {
-            normal: files["70c83cc8-6e33-438b-880b-8601499d7876.ico"],
-            apple: files["f8b64516-9254-4022-a8c0-54a18eac2770.png"]
-        },
-        user: files["1bc0f6e2-cbb5-4890-9af5-e5838f1d34da.webp"],
-        slider: {
-            0: files["d349bca7-e609-4a94-8c21-6324d3479e52.webp"],
-            1: files["2c5d4938-2fca-4b5d-b7ef-2755759c3550.webp"],
-            2: files["ee960156-596d-4880-8d59-e174285384ab.webp"]
-        },
-        home: {
-            cover: files["e18f1fa3-e864-473b-b1b5-15207db517f8-a.webp"],
-            background: files["e18f1fa3-e864-473b-b1b5-15207db517f8-b.webp"]
-        }
+    /** Definir el Estado Inicial de la Autenticación de la Aplicación */
+    const session = initialState["firebase"]!["authentication"]["currentUser"];
+    initialState["auth"] = {
+        state: session ? true : false,
+        user: session ?? undefined,
+        information: session ? (await defineUserInformationObject({},initialState["firebase"]!["database"],session!["uid"])) : undefined
     };
     return initialState;
 };

@@ -5,21 +5,20 @@
 @description Componente con el Slider Preterminado de la Aplicación
 @date 17/11/23 12:00
 */
-import {useState,useContext} from 'react';
+import {useState} from 'react';
 import {Control,Image} from '../addon/slider';
 import {useTranslation} from 'react-i18next';
-import {Context as Service} from '../../../context/service';
+import Domain from '../../../util/domain';
 
 /** Componente con el Slider Preterminado de la Aplicación */
 const Slider = () => {
-    const {asset} = useContext(Service);
     const {t} = useTranslation();
     const [current,setCurrent] = useState<number>(0);
     const SliderTitle = t("SLangAppTranslationViewLoginSliderTitle")["split"]("|");
     const SliderMessage = t("SLangAppTranslationViewLoginSliderMessage")["split"]("|");
     return (
         <div className="slidermain">
-            <Image image={asset!["slider"][current]} title={SliderTitle[current]} message={SliderMessage[current]}/>
+            <Image image={Domain(`login/slider/${current}.webp`)} title={SliderTitle[current]} message={SliderMessage[current]}/>
             <Control callback={setCurrent} viewID={current}/>
         </div>
     );

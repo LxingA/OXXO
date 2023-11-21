@@ -9,15 +9,16 @@ import {Fragment,useContext} from 'react';
 import {Context as Authenticacion} from '../../../context/auth';
 import {Context as Service} from '../../../context/service';
 import {ButtonSignOut,PhotoCircle,Navbar} from '../addon/menu';
+import Domain from '../../../util/domain';
 
 /** Componente con el Menú Principal del Panel de Control */
 const Menu = () => {
     const {user} = useContext(Authenticacion);
-    const {firebase,asset} = useContext(Service);
+    const {firebase} = useContext(Service);
     return (
         <Fragment>
             <div className="col1 mm">
-                <PhotoCircle userDefault={asset!["user"]} userPhoto={user!["photoURL"]}/>
+                <PhotoCircle userDefault={Domain("user/default.webp")} userPhoto={user!["photoURL"]}/>
             </div>
             <div className="col2 mm">
                 <Navbar />

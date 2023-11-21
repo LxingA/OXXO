@@ -8,13 +8,14 @@
 import {useContext} from 'react';
 import {Context} from '../../../context/service';
 import {Logo,Option} from '../addon/header';
+import Domain from '../../../util/domain';
 
 /** Componente con la Cabecera de la Vista de Autenticación */
 const Header = () => {
-    const {asset,application,dispatcher} = useContext(Context);
+    const {application,dispatcher} = useContext(Context);
     return (
         <div className="NavForm">
-            <Logo path={asset!.logo![application?.dark ? "light" : "color"]}/>
+            <Logo path={Domain(application?.dark ? "logo/dark.webp" : "logo/light.webp")}/>
             <Option state={application!.dark} dispatch={dispatcher!}/>
         </div>
     )

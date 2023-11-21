@@ -7,7 +7,9 @@
 */
 import {createContext,ReactNode,useEffect,useState} from 'react';
 import {onAuthStateChanged} from 'firebase/auth';
+import {defineUserInformationObject} from '../util/callback';
 import type {Auth} from 'firebase/auth';
+import type {Firestore} from 'firebase/firestore';
 import type AuthPrototype from '../type/auth';
 //import type Input from '../type/reducer';
 
@@ -29,21 +31,26 @@ const Reducer = (state:AuthPrototype,action:Input) => {
 */
 
 /** Definición del Componente para Inyectar en el DOM de la Aplicación */
-export default function({children,client}:{
+export default function({children,client,initialState}:{
     /** Referencía al DOM del Hijo para la Inyección */
     children: ReactNode,
-    /** Referencía a la Instancía de Firebase Auth with Identity Platform */
-    client: Auth
+    /** Referencía a las Instancias de Firebase para la Autenticación */
+    client: {
+        /** Referencía a la Instancia de Firebase Firestore */
+        database: Firestore,
+        /** Referencía a la Instancia de Firebase Auth by Identity Platform */
+        authentication: Auth
+    },
+    /** Referencía al Estado Inicial para la Autenticación */
+    initialState: AuthPrototype
 }){
-    const initialState: AuthPrototype = {
-        state: client["currentUser"] ? true : false,
-        user: client["currentUser"] ?? undefined
-    };
     const [state,setState] = useState<AuthPrototype>(initialState);
     useEffect(() => {
-        const authentic = onAuthStateChanged(client,(user => {
-            if(user && !state["user"]) setState({state:true,user});
-            else if(!user && state["state"]) setState({state:false,user:undefined});
+        const authentic = onAuthStateChanged(client["authentication"],(async user => {
+            if(user && !state["user"]){
+                const information = (await defineUserInformationObject({},client["database"],user["uid"]));
+                setState({state:true,user,information});
+            }else if(!user && state["state"]) setState({state:false,user:undefined});
         }));return () => authentic();
     });
     return (

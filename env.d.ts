@@ -13,7 +13,11 @@ interface ImportMetaEnv {
     /** Identificador Único de la Aplicación de Firebase */
     SGlobAppParamFirestoreAppID: string,
     /** Clave de Acceso a Recaptcha V3 para la Autenticación con Firebase */
-    SGlobAppParamFirestoreAppCheckerReCaptchaV3Key: string
+    SGlobAppParamFirestoreAppCheckerReCaptchaV3Key: string,
+    /** Ruta Absoluta HTTP para el Punto Final de los Recursos en la CDN del Proyecto */
+    SGlobAppParamCDNDomain: string,
+    /** Ruta Absoluta HTTP del Punto Final de la Base de Datos en Tiempo Real de Firebase */
+    SGlobAppParamRealTimeDatabaseDomain: string
 }
 interface ImportMeta {
     readonly env: ImportMetaEnv

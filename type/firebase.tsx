@@ -5,9 +5,10 @@
 @description Definición del Prototipo para los Servicios de Firebase
 @date 16/11/23 19:30
 */
-import {Firestore} from 'firebase/firestore';
-import {FirebaseStorage} from 'firebase/storage';
-import {Auth} from 'firebase/auth';
+import type {Firestore} from 'firebase/firestore';
+import type {FirebaseStorage} from 'firebase/storage';
+import type {Auth} from 'firebase/auth';
+import type {Database} from 'firebase/database';
 
 /** Prototipo para la Definición del Objeto con los Servicios de Firebase para la Aplicación */
 type Firebase = {
@@ -16,7 +17,9 @@ type Firebase = {
     /** Referencía a la Instancia de Cloud Storage como Almacenamiento */
     storage: FirebaseStorage,
     /** Referencía a la Instancía de Authentication With Identity Platform */
-    authentication: Auth
+    authentication: Auth,
+    /** Referencía a la Instancía de Firebase Database Realtime */
+    realtime: Database
 };
 
 export default Firebase;
