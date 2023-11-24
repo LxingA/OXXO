@@ -38,7 +38,7 @@ const Index = () => {
     const container = (pathname["split"]("/")["length"] > 2);
     if(!state) return (
         <div className={container ? "formContentMain" : "formContentMain HomeOxxo"}>
-            <ComponentHeader />
+            <ComponentHeader query/>
             <div className="column1">
                 {container ? (
                     <div className="formctn">

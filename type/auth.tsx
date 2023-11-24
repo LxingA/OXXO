@@ -43,13 +43,6 @@ type Auth = {
         administrator?: boolean,
         /** Establecer un Rol Inicial al Usuario */
         role?: "codeink" | "xink" | "oxxo",
-        /** Contenedor con Preferencías para una Mejor Experiencia de Usuario */
-        preference?: {
-            /** Establecer el Tema Predeterminado para el Usuario */
-            dark: boolean,
-            /** Establecer el Idioma Predeterminado para el Usuario */
-            language: "es" | "en"
-        },
         /** Rol Asignado al Usuario pero Titulado */
         title?: string
     }

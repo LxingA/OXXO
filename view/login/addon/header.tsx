@@ -11,14 +11,16 @@ import {useTranslation} from 'react-i18next';
 import Input from '../../../type/reducer';
 
 /** Complemento para Mostrar el Logo de la Cabecera */
-export const Logo = ({path}:{
+export const Logo = ({path,query}:{
     /** Ruta Absoluta HTTP del Logo Principal de la Aplicación */
-    path: string
+    path: string,
+    /** Indicar que se Añada el Parámetro Search en el Link */
+    query: boolean
 }) => {
     const {search} = useLocation();
     return (
         <div className="col1">
-            <Link to={{pathname:"/auth",search}}>
+            <Link to={query ? {pathname:"/auth",search} : {pathname:"/auth"}}>
                 <img src={path}/>
             </Link>
         </div>

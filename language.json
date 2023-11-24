@@ -62,8 +62,28 @@
             "SLangAppTranslationViewActionPageDoRecoverEmailTitle": "Email Reset",
             "SLangAppTranslationViewActionPageDoResetPasswordTitle": "Password Reset",
             "SLangAppTranslationViewActionPageDoVerifyEmailTitle": "Email Verification",
-            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessMessage": "¡Email has been successfully verified!",
-            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessTitle": "Correct Verification"
+            "SLangAppTranslationViewActionPageDoReauthButtonLabel": "Identify Yourself Again|Identifying...",
+            "SLangAppTranslationViewActionPageDoReauthErrorLabel": "Authentication Failure",
+            "SLangAppTranslationViewActionPageDoReauthErrorMessage": "There was an error after verifying your session. Contact the Developer",
+            "SLangAppTranslationViewActionPageDoReauthInputLabel": "Retype your password",
+            "SLangAppTranslationViewActionPageDoReauthSuccessLabel": "Successful Authentication",
+            "SLangAppTranslationViewActionPageDoReauthSuccessMessage": "You have successfully identified yourself. You will be redirected to the previous action",
+            "SLangAppTranslationViewActionPageDoRecoverEmailButtonLabel": "Update Email|Updating...",
+            "SLangAppTranslationViewActionPageDoRecoverEmailErrorLabel": "Update Error",
+            "SLangAppTranslationViewActionPageDoRecoverEmailErrorMessage": "There was an error after updating your email. Please contact the Developer",
+            "SLangAppTranslationViewActionPageDoRecoverEmailSuccessLabel": "Successfully Updated",
+            "SLangAppTranslationViewActionPageDoRecoverEmailSuccessMessage": "Your email has been successfully updated",
+            "SLangAppTranslationViewActionPageDoResetPasswordButtonLabel": "Update Password|Updating...",
+            "SLangAppTranslationViewActionPageDoResetPasswordErrorLabel": "Update Error",
+            "SLangAppTranslationViewActionPageDoResetPasswordErrorMessage": "There was an error after updating your password. Please contact the Developer",
+            "SLangAppTranslationViewActionPageDoResetPasswordInputLabel": "Please write your new password",
+            "SLangAppTranslationViewActionPageDoResetPasswordSuccessLabel": "Updated Password",
+            "SLangAppTranslationViewActionPageDoResetPasswordSuccessMessage": "Your password has been successfully updated",
+            "SLangAppTranslationViewActionPageDoVerifyEmailButtonLabel": "Confirm Email|Confirming...",
+            "SLangAppTranslationViewActionPageDoVerifyEmailErrorLabel": "Error to Confirm",
+            "SLangAppTranslationViewActionPageDoVerifyEmailErrorMessage": "There was an error after confirming your email. Please contact the Developer",
+            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessLabel": "Successful Confirmation",
+            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessMessage": "Your email has been successfully confirmed"
         }
     },
     "es": {
@@ -129,8 +149,29 @@
             "SLangAppTranslationViewActionPageDoRecoverEmailTitle": "Restablecimiento del Correo Electrónico",
             "SLangAppTranslationViewActionPageDoVerifyEmailTitle": "Verificación del Correo Electrónico",
             "SLangAppTranslationViewActionPageDoReauthUserTitle": "Reautenticación de una Cuenta",
-            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessMessage": "¡Se ha verificado con éxito el correo electrónico!",
-            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessTitle": "Verificación Correcta"
+            "SLangAppTranslationViewActionPageDoRecoverEmailSuccessLabel": "Actualizado con Éxito",
+            "SLangAppTranslationViewActionPageDoRecoverEmailSuccessMessage": "Se ha actualizado con éxito tú correo electrónico",
+            "SLangAppTranslationViewActionPageDoRecoverEmailErrorLabel": "Error a Actualizar",
+            "SLangAppTranslationViewActionPageDoRecoverEmailErrorMessage": "Hubo un error tras actualizar tú correo electrónico. Favor de contactar con el Desarrollador",
+            "SLangAppTranslationViewActionPageDoRecoverEmailButtonLabel": "Actualizar el Correo Electrónico|Actualizando...",
+            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessLabel": "Confirmación con Éxito",
+            "SLangAppTranslationViewActionPageDoVerifyEmailSuccessMessage": "Se ha confirmado con éxito tú correo electrónico",
+            "SLangAppTranslationViewActionPageDoVerifyEmailErrorLabel": "Error a Confirmar",
+            "SLangAppTranslationViewActionPageDoVerifyEmailErrorMessage": "Hubo un error tras confirmar tú correo electrónico. Favor de contactar con el Desarrollador",
+            "SLangAppTranslationViewActionPageDoVerifyEmailButtonLabel": "Confirmar el Correo Electrónico|Confirmando...",
+            "SLangAppTranslationViewActionPageDoResetPasswordSuccessLabel": "Contraseña Actualizada",
+            "SLangAppTranslationViewActionPageDoResetPasswordSuccessMessage": "Se ha actualizado con éxito tú contraseña",
+            "SLangAppTranslationViewActionPageDoResetPasswordErrorLabel": "Error a Actualizar",
+            "SLangAppTranslationViewActionPageDoResetPasswordErrorMessage": "Hubo un error tras actualizar tú contraseña. Favor de contactar con el Desarrollador",
+            "SLangAppTranslationViewActionPageDoResetPasswordInputLabel": "Favor de escribir tú nueva contraseña",
+            "SLangAppTranslationViewActionPageDoResetPasswordButtonLabel": "Actualizar la Contraseña|Actualizando...",
+            "SLangAppTranslationViewActionPageDoReauthSuccessLabel": "Autenticación con Éxito",
+            "SLangAppTranslationViewActionPageDoReauthSuccessMessage": "Te has identificado con éxito. Serás redireccionado a la acción previa",
+            "SLangAppTranslationViewActionPageDoReauthErrorLabel": "Fallo a Autenticar",
+            "SLangAppTranslationViewActionPageDoReauthErrorMessage": "Hubo un error tras verificar tú sesión. Contacta con el Desarrollador",
+            "SLangAppTranslationViewActionPageDoReauthInputLabel": "Escribe nuevamente tú contraseña",
+            "SLangAppTranslationViewActionPageDoReauthButtonLabel": "Identificarse Nuevamente|Identificando..."
+
         }
     }
 }

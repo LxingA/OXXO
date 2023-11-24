@@ -11,11 +11,14 @@ import {Logo,Option} from '../addon/header';
 import Domain from '../../../util/domain';
 
 /** Componente con la Cabecera de la Vista de Autenticación */
-const Header = () => {
+const Header = ({query}:{
+    /** Indicar que en el Enlace se Incluya el Parámetro Query */
+    query: boolean
+}) => {
     const {application,dispatcher} = useContext(Context);
     return (
         <div className="NavForm">
-            <Logo path={Domain(application?.dark ? "logo/dark.webp" : "logo/light.webp")}/>
+            <Logo path={Domain(application?.dark ? "logo/dark.webp" : "logo/light.webp")} query={query}/>
             <Option state={application!.dark} dispatch={dispatcher!}/>
         </div>
     )

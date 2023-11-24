@@ -40,6 +40,7 @@ export default function({children,service}:{
     service: ServicePrototype
 }){
     useLayoutEffect(() => {
+        document["body"]["setAttribute"]("class",(service["application"]?.dark ? "dark" : "light"));
         DOM({
             rel: "icon",
             href: Domain("favicon.ico"),

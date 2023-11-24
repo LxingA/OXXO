@@ -11,7 +11,7 @@ import i18n from 'i18next';
 import Languages from '../language.json';
 
 i18n["use"](initReactI18next)["init"]({
-    lng: "es",
+    lng: navigator["language"] ?? "es",
     fallbackLng: "en",
     interpolation: {
         escapeValue: false
