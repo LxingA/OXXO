@@ -31,7 +31,7 @@ export const Input = ({title,message,option,checker,state,loading,callback,error
     /** Indicar si la Entrada está en Modo Cargando */
     loading: boolean,
     /** Referencía al Callback de Mutación */
-    callback: (event:MouseEvent<HTMLButtonElement>,name:string) => Promise<void>,
+    callback: (name:string,event?:MouseEvent<HTMLButtonElement>) => Promise<void>,
     /** Referencía al Mensaje de Error a Mostrar */
     error: string | null
 }) => {
@@ -58,7 +58,7 @@ export const Input = ({title,message,option,checker,state,loading,callback,error
                     </div>
                 )}
             </div>
-            <button onClick={event => callback(event,option["name"])} className="full" disabled={state[option["name"]]["value"] === message || (typeof state[option["name"]]["value"] == "undefined" || state[option["name"]]["check"] == "invalid") || loading}>
+            <button onClick={event => callback(option["name"],event)} className="full" disabled={state[option["name"]]["value"] === message || (typeof state[option["name"]]["value"] == "undefined" || state[option["name"]]["check"] == "invalid") || loading}>
                 {loading ? buttonLabel[1] : buttonLabel[0]}
             </button>
         </div>

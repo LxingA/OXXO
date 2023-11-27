@@ -42,7 +42,8 @@ export const initialObjectAuthentication = (state?: {}): Authentication => {
         user: {
             min: 6,
             max: 50
-        }
+        },
+        idle: 60000
     } as Authentication);
 };
 

@@ -12,10 +12,13 @@ import {Context as Service} from '../../../context/service';
 import {ref,uploadBytes,getDownloadURL} from 'firebase/storage';
 import {updateProfile,updateEmail,updatePassword,sendEmailVerification} from 'firebase/auth';
 import {Input} from '../addon/account';
+import {v4} from 'uuid';
+import {useNavigate,useSearchParams} from 'react-router-dom';
 import Loader from '../../loader';
 import Domain from '../../../util/domain';
 import type {ChangeEvent,MouseEvent} from 'react';
 import type {ValidityInput} from '../../login/type/form';
+import $ from 'jquery';
 
 /** Componente con la Información General de un Usuario */
 export const AccountInformation = () => {
@@ -30,9 +33,11 @@ export const AccountInformation = () => {
             value: undefined
         }
     };
+    const navigator = useNavigate();
     const {t} = useTranslation();
     const {user} = useContext(Authentication);
     const {authentication} = useContext(Service);
+    const [query] = useSearchParams();
     const [values,setValues] = useState<Record<string,ValidityInput>>(defaultValues);
     const [loading,setLoading] = useState<Record<string,boolean>>({
         osoxxo_input_account_name: false,
@@ -115,20 +120,26 @@ export const AccountInformation = () => {
         });
     };
     /** Callback para realizar la Mutación de Algún Dato en el Usuario */
-    const MutateHandler = async(event:MouseEvent<HTMLButtonElement>,name:string): Promise<void> => {
-        event["preventDefault"]();
+    const MutateHandler = async(name:string,event?:MouseEvent<HTMLButtonElement>): Promise<void> => {
+        event && event["preventDefault"]();
         setLoading(state => UtilHandlerLoader(state,name,true));
         setMessage(state => UtilHandlerMessage(state,name,null));
         try{
             switch(name){
                 case "osoxxo_input_account_name":
                     (await updateProfile(user!,{displayName:values[name]["value"]}));
+                    setValues(state => ({...state,osoxxo_input_account_name:{value:undefined}}));
+                    $('input[name="osoxxo_input_account_name"]')["val"]("");
                 break;
                 case "osoxxo_input_account_email":
                     (await updateEmail(user!,values[name]["value"]!));
+                    setValues(state => ({...state,osoxxo_input_account_email:{value:undefined}}));
+                    $('input[name="osoxxo_input_account_email"]')["val"]("");
                 break;
                 case "osoxxo_input_account_password":
                     (await updatePassword(user!,values[name]["value"]!));
+                    setValues(state => ({...state,osoxxo_input_account_password:{value:undefined}}));
+                    $('input[name="osoxxo_input_account_password"]')["val"]("");
                 break;
                 case "osoxxo_input_account_verify":
                     (await sendEmailVerification(user!));
@@ -142,12 +153,22 @@ export const AccountInformation = () => {
             });
             (name == "osoxxo_input_account_verify") && setMessage(state => UtilHandlerMessage(state,name,t("SLangAppTranslationViewPanelPageAccountPersonalVerifySenderSuccess")));
         }catch(error){
-            setLoading(state => UtilHandlerLoader(state,name,false));
             switch((error as {})["code"]){
+                case "auth/email-already-in-use":
+                    setMessage(state => UtilHandlerMessage(state,name,t("SLangAppTranslationViewPanelPageAccountPersonalUpdateEmailAlreadyInUseMessage")));
+                break;
+                case "auth/requires-recent-login":
+                    const setUniqKeyForRequest = v4();
+                    sessionStorage["setItem"]("sindexauthentictoken",JSON["stringify"]({
+                        continue: encodeURIComponent(location["pathname"]),
+                        token: setUniqKeyForRequest
+                    }));
+                    navigator(`/do?mode=reauth&requestID=${setUniqKeyForRequest}`,{replace:true});
+                break;
                 default:
                     setMessage(state => UtilHandlerMessage(state,name,t("SLangAppTranslationViewPanelPageAccountPersonalUnknownUpdateAnyInformationError")));
                 break;
-            }
+            }setLoading(state => UtilHandlerLoader(state,name,false));
         }
     };
     const buttonLabelVerify = t("SLangAppTranslationViewPanelPageAccountPersonalVerifyEmailButton")["split"]("|");
@@ -172,7 +193,7 @@ export const AccountInformation = () => {
                     <p>
                         {message["osoxxo_input_account_verify"] ?? t("SLangAppTranslationViewPanelPageAccountPersonalVerifyEmailMessage")}
                     </p>
-                    <button onClick={event => MutateHandler(event,"osoxxo_input_account_verify")} className="full" disabled={typeof message["osoxxo_input_account_verify"] == "string" || loading["osoxxo_input_account_verify"]}>
+                    <button onClick={event => MutateHandler("osoxxo_input_account_verify",event)} className="full" disabled={typeof message["osoxxo_input_account_verify"] == "string" || loading["osoxxo_input_account_verify"]}>
                         {loading["osoxxo_input_account_verify"] ? buttonLabelVerify[1] : (message["osoxxo_input_account_verify"]) ? buttonLabelVerify[2] : buttonLabelVerify[0]}
                     </button>
                 </div>

@@ -11,6 +11,6 @@
  * @param $path Ruta Relativa al Recurso a Obtener
  * @param $key Clave única de 12 de Longitud para Establecerlo en Cache el Recurso
  */
-const Domain = ($path:string,$key?:string): string => `${import.meta.env.SGlobAppParamCDNDomain}/${import.meta.env.SGlobAppParamFirestoreProjectID}/${$path}?v=${$key ?? "jyenzghgmdjp"}`;
+const Domain = ($path:string,$key?:string): string => `${import.meta.env.SGlobAppParamCDNDomain}/${$path}?v=${$key ?? "jyenzghgmdjp"}`;
 
 export default Domain;

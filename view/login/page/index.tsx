@@ -41,11 +41,14 @@ const Home = () => {
         }catch(code){
             setLoading(false);
             switch((code as {})["code"]){
-                case "auth/invalid-login-credentials":
-                    setError(t("SLangAppTranslationViewLoginFormSubmitCodeError_INVALID_LOGIN_CREDENTIALS"));
+                case "auth/user-not-found":
+                    setError(t("SLangAppTranslationViewLoginFormSubmitCodeErrorUserNotFound"));
+                break;
+                case "auth/wrong-password":
+                    setError(t("SLangAppTranslationViewLoginFormSubmitCodeErrorWrongPassword"));
                 break;
                 default:
-                    setError(t("SLangAppTranslationViewLoginFormSubmitCodeError_UNKNOWN_ERROR"));
+                    setError(t("SLangAppTranslationViewLoginFormSubmitCodeErrorUnknownError"));
                 break;
             }
         }

@@ -41,6 +41,9 @@ const Element = {
                 (await applyActionCode(client,code!));
                 (await client["updateCurrentUser"](client["currentUser"]));
                 setState(true);
+                setTimeout(() => {
+                    location["href"] = "/account";
+                },2000);
             }catch(_){setState(false)}
         };return (
             <Fragment>
@@ -96,12 +99,14 @@ const Element = {
                             setState(true);
                         break;
                         case "reauth":
-                            const savedRequestedID = localStorage["getItem"]("sindexauthentictoken");
-                            if(!savedRequestedID || (query["get"]("requestID")! !== savedRequestedID!)) setState(false);
+                            const savedRequestedID = sessionStorage["getItem"]("sindexauthentictoken");
+                            if(!savedRequestedID || (query["get"]("requestID") !== JSON["parse"](savedRequestedID)["token"])) setState(false);
                             else{
+                                let dencryptRequestedID = JSON["parse"](savedRequestedID);
                                 (await reauthenticateWithCredential(client["currentUser"]!,EmailAuthProvider["credential"](client["currentUser"]!["email"]!,value["value"]!)));
                                 setState(true);
-                                setTimeout(() => navigator(`/account?exec=${savedRequestedID}`,{replace:true}),3000);
+                                setTimeout(() => navigator(decodeURIComponent(dencryptRequestedID["continue"]),{replace:true}),3000);
+                                sessionStorage["removeItem"]("sindexauthentictoken");
                             }
                         break;
                     }
@@ -122,7 +127,7 @@ const Element = {
         };return (
             <Fragment>
                 <h3>
-                    {conditional ? (state ? t(`SLangAppTranslationViewActionPageDo${upperStringFirst(mode)}SuccessLabel`) : t(`SLangAppTranslationViewActionPageDo${upperStringFirst(mode)}ErrorLabel`)) : t(`SLangAppTranslationViewActionPageDo${upperStringFirst(mode)}Title`)}
+                    {conditional ? (state ? t(`SLangAppTranslationViewActionPageDo${upperStringFirst(mode)}SuccessLabel`) : t(`SLangAppTranslationViewActionPageDo${upperStringFirst(mode)}ErrorLabel`)) : t("SLangAppTranslationViewLoginAuthTitle")}
                 </h3>
                 {conditional ? (
                     <Fragment>
@@ -206,7 +211,7 @@ const Action = () => {
                 document["title"] = definedTitle["replace"]("%TITLE%",t("SLangAppTranslationViewActionPageDoVerifyEmailTitle"));
             break;
             case "reauth":
-                (!query["has"]("requestID")) && navigator("/",{replace:true});
+                (!query["has"]("requestID") || !sessionStorage["getItem"]("sindexauthentictoken")) && navigator("/",{replace:true});
                 document["title"] = definedTitle["replace"]("%TITLE%",t("SLangAppTranslationViewActionPageDoReauthUserTitle"));
             break;
         }

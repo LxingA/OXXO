@@ -26,7 +26,9 @@ export type Authentication = {
         min: number,
         /** Máximo */
         max: number
-    }
+    },
+    /** Tiempo en Milisegundos para Establecer el Tiempo de Inactividad de un Usuario */
+    idle: number
 };
 
 /** Definción del Prototipo para el Objeto de la Autentición */
