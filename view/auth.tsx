@@ -15,9 +15,9 @@ const Auth = ({children}:{
     children: ReactNode
 }) => {
     const {state} = useContext(Context);
-    const {pathname} = useLocation();
+    const {pathname,search} = useLocation();
     return state ? children : (
-        <Navigate to={`/auth?continue=${encodeURIComponent(pathname)}`} replace/>
+        <Navigate to={`/auth?continue=${encodeURIComponent(pathname+search)}`} replace/>
     );
 };
 

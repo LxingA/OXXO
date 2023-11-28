@@ -5,7 +5,7 @@
 @description Componentes para la Vista de las Ordenes de la Aplicación
 @date 20/11/23 14:30
 */
-import {useState} from 'react';
+import {useState,useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useSearchParams} from 'react-router-dom';
 import type {ChangeEvent,MouseEvent} from 'react';
@@ -21,7 +21,7 @@ export const TrackInput = () => {
     const ChangedHandler = (event:ChangeEvent<HTMLInputElement>) => {
         event["preventDefault"]();
         const definedValueOnArray = event["target"]["value"]["split"](",")["map"](order => {
-            if(!isNaN(Number(order))) return parseInt(order);
+            if(!isNaN(Number(order)) && order !== "") return parseInt(order);
             else return 0;
         })["filter"](order => order !== 0);
         setValue(state => {
@@ -36,8 +36,8 @@ export const TrackInput = () => {
             }return {...current};
         });
     };
-    const SubmitHandler = (event:MouseEvent<HTMLButtonElement>) => {
-        event["preventDefault"]();
+    const SubmitHandler = (event?:MouseEvent<HTMLButtonElement>) => {
+        event && event["preventDefault"]();
         const values = JSON["parse"](value["value"]!) as number[];
         let definedQueryOrders: string = "";
         values["forEach"]((order,iterator) => {
@@ -46,6 +46,15 @@ export const TrackInput = () => {
             else if(iterator == (values["length"] - 1)) definedQueryOrders += `:${String(order)}`;
         });setQuery({o:definedQueryOrders});
     };
+    const OtherHandler = {
+        pressEvent: (event) => (event["key"] === "Enter" && (typeof value["value"] !== "undefined" && value["check"] == "valid")) && SubmitHandler()
+    };
+    useEffect(() => {
+        document["addEventListener"]("keydown",OtherHandler["pressEvent"],true);
+        return () => {
+            document["removeEventListener"]("keydown",OtherHandler["pressEvent"],true);
+        }
+    });
     return (
         <div className="MainCaja">
             <div className="ctnm">
