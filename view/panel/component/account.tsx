@@ -11,9 +11,10 @@ import {Context as Authentication} from '../../../context/auth';
 import {Context as Service} from '../../../context/service';
 import {ref,uploadBytes,getDownloadURL} from 'firebase/storage';
 import {updateProfile,updateEmail,updatePassword,sendEmailVerification} from 'firebase/auth';
+import {updateDoc,doc} from 'firebase/firestore';
 import {Input} from '../addon/account';
 import {v4} from 'uuid';
-import {useNavigate,useSearchParams} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Loader from '../../loader';
 import Domain from '../../../util/domain';
 import type {ChangeEvent,MouseEvent} from 'react';
@@ -36,8 +37,7 @@ export const AccountInformation = () => {
     const navigator = useNavigate();
     const {t} = useTranslation();
     const {user} = useContext(Authentication);
-    const {authentication} = useContext(Service);
-    const [query] = useSearchParams();
+    const {authentication,firebase} = useContext(Service);
     const [values,setValues] = useState<Record<string,ValidityInput>>(defaultValues);
     const [loading,setLoading] = useState<Record<string,boolean>>({
         osoxxo_input_account_name: false,
@@ -125,14 +125,17 @@ export const AccountInformation = () => {
         setLoading(state => UtilHandlerLoader(state,name,true));
         setMessage(state => UtilHandlerMessage(state,name,null));
         try{
+            const $__instanceDoc__ = doc(firebase!["database"],"user",user!["uid"]);
             switch(name){
                 case "osoxxo_input_account_name":
                     (await updateProfile(user!,{displayName:values[name]["value"]}));
+                    (await updateDoc($__instanceDoc__,{name:values[name]["value"]}));
                     setValues(state => ({...state,osoxxo_input_account_name:{value:undefined}}));
                     $('input[name="osoxxo_input_account_name"]')["val"]("");
                 break;
                 case "osoxxo_input_account_email":
                     (await updateEmail(user!,values[name]["value"]!));
+                    (await updateDoc($__instanceDoc__,{email:values[name]["value"]}));
                     setValues(state => ({...state,osoxxo_input_account_email:{value:undefined}}));
                     $('input[name="osoxxo_input_account_email"]')["val"]("");
                 break;
@@ -228,6 +231,7 @@ export const AccountPhoto = () => {
                     (await uploadBytes(reference,current[0]));
                     const photoURL = (await getDownloadURL(reference));
                     (await updateProfile(currentUser,{photoURL}));
+                    (await updateDoc(doc(firebase!["database"],"user",user!["uid"]),{photo:photoURL}));
                     setLoading(false);
                     setTimeout(() => document["querySelector"]("#simage_photo_user")!["setAttribute"]("src",photoURL),1000);
                 }catch(error){

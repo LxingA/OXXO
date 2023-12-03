@@ -12,6 +12,7 @@ import {useTranslation} from 'react-i18next';
 import {ContainerService,ContainerContextual} from './addon/box';
 import ComponentMenu from './component/menu';
 import ComponentNavbar from './component/navbar';
+import $ from 'jquery';
 
 /** Plantilla Predeterminada para el Panel de Control de la Aplicación */
 const Index = () => {
@@ -43,6 +44,9 @@ const Index = () => {
     const ServicesMessage = t("SLangAppTranslationViewLoginSliderMessage")["split"]("|");
     return (
         <div className="MainContentPanelOxxo">
+            <button className="BtnMenuM" onClick={_ => $(".navPanelPrimary")["toggleClass"]("active")}>
+                <i className="uil uil-bars"></i>
+            </button>
             <div className="navPanelPrimary">
                 <ComponentMenu />
             </div>

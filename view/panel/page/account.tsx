@@ -14,7 +14,7 @@ const Account = () => {
         const divParent = document["querySelector"](".ctnMainPatern")!;
         divParent["setAttribute"]("class","ctnMainPatern UserMain");
         return () => divParent["setAttribute"]("class","ctnMainPatern");
-    });
+    },[]);
     return (
         <Fragment>
             <div className="col1">

@@ -47,10 +47,10 @@ export default function({children,service}:{
             type: "image/x-icon",
             id: "favicon"
         },document);
-    });
+    },[]);
     useEffect(() => {
         Animate["init"]();
-    });
+    },[]);
     const [state,dispatcher] = useReducer(Reducer,service);
     return (
         <Context.Provider value={{...state,dispatcher}}>

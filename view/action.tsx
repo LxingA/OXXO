@@ -215,7 +215,7 @@ const Action = () => {
                 document["title"] = definedTitle["replace"]("%TITLE%",t("SLangAppTranslationViewActionPageDoReauthUserTitle"));
             break;
         }
-    });
+    },[]);
     return (query["has"]("mode") && allowedMethods["includes"](query["get"]("mode")!)) ? (
         <Component client={firebase!["authentication"]} mode={query["get"]("mode")!} code={query["get"]("oobCode")}/>
     ) : <Navigate to="/" replace/>;

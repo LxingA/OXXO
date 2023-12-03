@@ -6,6 +6,7 @@
 @date 14/11/23 16:15
 */
 import 'aos/dist/aos.css';
+import 'moment/locale/es';
 import {Suspense,StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import {I18nextProvider} from 'react-i18next';
@@ -23,8 +24,9 @@ import $ from 'jquery';
 /** Inicializar la Aplicación OXXO Help Desk */
 Firebase()["then"](service => {
     DOM({rel:"stylesheet",href:Domain("style.css"),type:"text/css",id:"style"},document);
+    DOM({rel:"stylesheet",href:Domain("mobile.css"),type:"text/css",id:"mobile"},document);
     document["$"], document["jQuery"] = $;
-    document["getElementById"]("style")!["onload"] = () => createRoot(document["getElementById"]("root") as HTMLElement)["render"](
+    document["getElementById"]("style")!["onload"] = () => document["getElementById"]("mobile")!["onload"] = () => createRoot(document["getElementById"]("root") as HTMLElement)["render"](
         <StrictMode>
             <I18nextProvider i18n={Language}>
                 <QueryClientProvider client={Query}>

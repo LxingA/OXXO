@@ -19,7 +19,7 @@ const Error = () => {
         return () => {
             $(".ctnMainPatern")["removeClass"]("ErrorPanel")
         };
-    });
+    },[]);
     return (
         <div className="Annoucement">
             <div className="imgBox">

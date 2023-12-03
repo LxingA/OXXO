@@ -9,7 +9,7 @@
 /** Definición del Objeto con el Estado Inicial de las Entradas de los Formularios */
 export type ValidityInput = {
     /** Valor Actual de la Entrada */
-    value: string | undefined,
+    value: any | undefined,
     /** Indicar sí la Entrada contiene un Valor Valido */
     check?: "valid" | "invalid"
 };

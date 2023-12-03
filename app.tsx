@@ -18,6 +18,7 @@ import PanelPageAccount from './view/panel/page/account';
 import ErrorPagePanel from './view/panel/page/error';
 import ErrorPageAuth from './view/login/page/error';
 import ActionTemplate from './view/action';
+import PanelPageIncidentViewAdd from './view/panel/page/order_incident_create';
 
 /** Renderización de la Aplicación en el DOM */
 const App = () => {
@@ -30,7 +31,9 @@ const App = () => {
             }>
                 <Route path="order_view" element={<PanelPageView />}/>
                 <Route path="order_check" element={<PanelPageReview />}/>
-                <Route path="order_incident" element={<PanelPageIncident />}/>
+                <Route path="order_incident" element={<PanelPageIncident />}>
+                    <Route path="create" element={<PanelPageIncidentViewAdd />}/>
+                </Route>
                 <Route path="account" element={<PanelPageAccount />}/>
                 <Route path="*" element={<ErrorPagePanel />}/>
             </Route>

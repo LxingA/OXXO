@@ -31,6 +31,25 @@ export type Authentication = {
     idle: number
 };
 
+/** Definición del Prototipo para los Roles de la Aplicación */
+type Role = "codeink" | "xink" | "oxxo";
+
+/** Definición del Prototipo con la Información General de un Usuario */
+export type UserFromDatabaseInformation = {
+    /** Establecer el Usuario con Permisos de Administración */
+    administrator?: boolean,
+    /** Establecer un Rol Inicial al Usuario */
+    role?: Role,
+    /** Rol Asignado al Usuario pero Titulado */
+    title?: string,
+    /** Nombre Completo del Usuario en la Aplicación */
+    name?: string,
+    /** Correo Electrónico del Usuario en la Aplicación */
+    email?: string,
+    /** Ruta Absoluta HTTP del Foto de Perfil del Usuario en la Aplicación */
+    photo?: string
+};
+
 /** Definción del Prototipo para el Objeto de la Autentición */
 type Auth = {
     /** Indicar si existe una Sesión Actual en el Contexto */
@@ -40,14 +59,9 @@ type Auth = {
     /** Contenedor con la Información General de un Usuario */
     user?: User | null,
     /** Contenedor con la Información Adicional del Usuario */
-    information?: {
-        /** Establecer el Usuario con Permisos de Administración */
-        administrator?: boolean,
-        /** Establecer un Rol Inicial al Usuario */
-        role?: "codeink" | "xink" | "oxxo",
-        /** Rol Asignado al Usuario pero Titulado */
-        title?: string
-    }
+    information?: UserFromDatabaseInformation
 };
+
+export type RoleGroup = Role[];
 
 export default Auth;

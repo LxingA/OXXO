@@ -19,7 +19,7 @@ const Error = () => {
         return () => {
             $(".formContentMain")["removeClass"]("ErrorGeneral");
         }
-    });
+    },[]);
     return (
         <div className="flexie">
             <div className="ctnTitle" data-aos="fade-up" data-aos-duration="1000">
