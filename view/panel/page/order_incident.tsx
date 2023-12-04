@@ -12,10 +12,8 @@ import {Context as Service} from '../../../context/service';
 import {ComponentIncidentEmptyView,ComponentIncidentListView,ComponentIncidentListViewPagination} from '../component/incident';
 import {useTranslation} from 'react-i18next';
 import {Outlet,useLocation,useNavigate} from 'react-router-dom';
-import {ref,listAll,getMetadata,getDownloadURL} from 'firebase/storage';
 import type {QueryFieldFilterConstraint} from 'firebase/firestore';
 import type {RoleGroup} from '../../../type/auth';
-import type {Evidence} from '../type/incident';
 import type IncidentPrototype from '../type/incident';
 import Domain from '../../../util/domain';
 import Loader from "../../loader";
@@ -42,21 +40,10 @@ const Incident = () => {
                 $request["docs"]["map"](async $object => {
                     if(!$object["exists"]()) return;
                     else{
-                        const incident = ($object["data"]() as IncidentPrototype);
+                        let incident = ($object["data"]() as IncidentPrototype);
+                        incident["docID"] = $object["id"];
                         const information = (await getDoc(doc(firebase!["database"],"user",incident["user"])))["data"]()!;
-                        const evidence: Evidence[] = [];
-                        (await Promise["all"](
-                            (await listAll(ref(firebase!["storage"],`i/${incident["user"]}/${incident["id"]}`)))["items"]["map"](async ({storage,fullPath}) => {
-                                const meta = (await getMetadata(ref(storage,fullPath)))["customMetadata"]!;
-                                const url = (await getDownloadURL(ref(storage,fullPath)));
-                                evidence["push"]({
-                                    name: meta["name"],
-                                    mime: meta["mime"],
-                                    url
-                                } as Evidence);
-                            })
-                        ));
-                        $incidents["push"]({...incident,information,evidence});
+                        $incidents["push"]({...incident,information});
                     };
                 })
             ));
@@ -92,8 +79,8 @@ const Incident = () => {
                 pathname == "/order_incident" ? (
                     <Fragment>
                         <div className="unlistIncidencias">
-                            {data[page - 1]["map"](({title,id,status,message,date,information,order,evidence},iterator) => (
-                                <ComponentIncidentListView key={iterator} evidences={evidence} order={order?.["split"](",")} user={{name:information["name"]??information["email"]!,role:t(information["title"]!),photo:information!["photo"]??Domain("user/default.webp")}} createdAt={date} description={message} title={title} uniqKey={id} statusID={status}/>
+                            {data[page - 1]["map"](({title,id,status,message,date,information,order,user,docID},iterator) => (
+                                <ComponentIncidentListView key={iterator} id={docID} order={order?.["split"](",")} user={{name:information["name"]??information["email"]!,role:t(information["title"]!),photo:information!["photo"]??Domain("user/default.webp"),id:user}} createdAt={date} description={message} title={title} uniqKey={id} statusID={status}/>
                             ))}
                         </div>
                         {(data["length"] >= 2) && (

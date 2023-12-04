@@ -5,14 +5,15 @@
 @description Componentes para la Vista de Incidencias de la Aplicación
 @date 28/11/23 19:30
 */
-import {Fragment,useContext} from 'react';
+import {Fragment,useContext,useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {AddonComponentIncidentButtonsListView,AddonComponentIncidentListViewUserInfoBox,AddonComponentIncidentEvidenceListView} from '../addon/incident';
+import {AddonComponentIncidentBoxUpdateIncidence,AddonComponentIncidentBoxMediaShowContent} from '../addon/incident';
 import {Context as Authentication} from '../../../context/auth';
 import type {Timestamp} from 'firebase/firestore';
 import type {SetStateAction,Dispatch} from 'react';
 import type {RoleGroup} from '../../../type/auth';
-import type {Evidence} from '../type/incident'; 
+import type {BoxProcessor,BoxMedia} from '../type/incident';
 import Domain from '../../../util/domain';
 import Timer from 'moment';
 
@@ -60,7 +61,7 @@ export const ComponentIncidentEmptyView = ({title,message}:{
 };
 
 /** Componente para Mostrar la Vista de la Incidencia en Modo Listado */
-export const ComponentIncidentListView = ({title,uniqKey,statusID,description,createdAt,user,order,evidences}:{
+export const ComponentIncidentListView = ({title,uniqKey,statusID,description,createdAt,user,order,id}:{
     /** Definir el Titulo para Mostrar en el Componente */
     title: string,
     /** Definir la ID Única de la Incidencia en el Componente */
@@ -78,18 +79,42 @@ export const ComponentIncidentListView = ({title,uniqKey,statusID,description,cr
         /** Rango Actual del Usuario */
         role: string,
         /** Ruta Absoluta HTTP de la Foto de Perfil del Usuario */
-        photo: string
+        photo: string,
+        /** ID Único del Usuario */
+        id: string
     },
     /** Contenedor con los Pedidos Asociadas a la Incidencia para el Componente */
     order?: string[],
-    /** Contenedor con Todas las Evidencias de la Incidencia para el Componente */
-    evidences: Evidence[]
+    /** Identificador Único del Documento Asociada a la Incidencia para el Componente */
+    id: string
 }) => {
     const {t} = useTranslation();
     const {information} = useContext(Authentication);
+    const [boxProcess,setBoxProcess] = useState<BoxProcessor>();
+    const [boxFollow,setBoxFollow] = useState<boolean>(false);
+    const [boxMedia,setBoxMedia] = useState<BoxMedia>();
+    const permission = (['xink'] as RoleGroup)["includes"](information!["role"]!);
     const maxLength = 42;
     return (
         <div className={(["oxxo"] as RoleGroup)["includes"](information!["role"]!) ? "box viewoxxo" : "box"}>
+            {boxProcess && (
+                <div className="ProcesoDiv">
+                    <div className="ctn">
+                        <h3>
+                            {boxProcess["title"]}
+                        </h3>
+                        <p>
+                            {boxProcess["message"]}
+                        </p>
+                    </div>
+                </div>
+            )}
+            {boxFollow && (
+                <AddonComponentIncidentBoxUpdateIncidence callback={setBoxFollow}/>
+            )}
+            {boxMedia && (
+                <AddonComponentIncidentBoxMediaShowContent {...boxMedia}/>
+            )}
             <div className="boxing IDIncd">
                 <div className="statusBarra Pendiente"></div>
                 {(['xink'] as RoleGroup)["includes"](information!["role"]!) && (
@@ -152,24 +177,16 @@ export const ComponentIncidentListView = ({title,uniqKey,statusID,description,cr
             </div>
             <div className="boxing Estatuss">
                 <div className="ctnn">
-                    <p className="statusp">
+                    <p className="statusp" style={permission ? {cursor:"pointer"} : undefined} onClick={() => permission && setBoxFollow(true)}>
                         {t(`SLangAppTranslationIncidentStatus${statusID["toString"]()}Label`)}
                     </p>
                 </div>
             </div>
             {(['oxxo'] as RoleGroup)["includes"](information!["role"]!) && (
-                <AddonComponentIncidentButtonsListView />
+                <AddonComponentIncidentButtonsListView id={id} uniqKey={uniqKey} box={setBoxProcess}/>
             )}
-            {(['xink'] as RoleGroup)["includes"](information!["role"]!) && (
-                <div className="imgList">
-                    {evidences["length"] === 0 ? (
-                        <p>
-                            {t("SLangAppTranslationViewPanelPageIncidentEvidenceContainerListEmptyLabel")}
-                        </p>
-                    ) : evidences["map"](({name,mime,url},iterator) => (
-                        <AddonComponentIncidentEvidenceListView name={name} type={mime} uri={url} key={iterator}/>
-                    ))}
-                </div>
+            {permission && (
+                <AddonComponentIncidentEvidenceListView box={setBoxMedia} id={uniqKey} user={user["id"]}/>
             )}
         </div>
     );

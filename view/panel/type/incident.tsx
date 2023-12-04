@@ -7,6 +7,7 @@
 */
 import type {Timestamp} from 'firebase/firestore';
 import type {UserFromDatabaseInformation} from '../../../type/auth';
+import type {SetStateAction,Dispatch} from 'react';
 
 /** Prototipo para la Definición del Objeto para las Evidencias de las Incidencias */
 export type Evidence = {
@@ -15,6 +16,27 @@ export type Evidence = {
     /** Ruta Absoluta HTTP de la Evidencia Original Firmada */
     url: string,
     /** Tipo de MIME de la Evidencia Original */
+    mime: string
+};
+
+/** Prototipo para la Definición del Objeto para la Caja del Procesor */
+export type BoxProcessor = {
+    /** Titulo para Mostrar en el Procesor */
+    title: string,
+    /** Mensaje para Mostrar en el Procesor */
+    message: string
+};
+
+/** Prototipo para la Definición del Objeto para la Caja con los Medios */
+export type BoxMedia = {
+    type: "pdf" | "image",
+    /** Nombre del Archivo de la Incidencia */
+    name: string,
+    /** Referencía al Callback para la Caja de los Medios */
+    callback: Dispatch<SetStateAction<BoxMedia | undefined>>,
+    /** Ruta Absoluta HTTP del Archivo de la Incidencia */
+    url: string,
+    /** Tipo de MIME del Archivo de la Incidencia */
     mime: string
 };
 
@@ -36,8 +58,8 @@ interface Incident {
     information: UserFromDatabaseInformation,
     /** Pedidos Asociadas a la Incidencia */
     order: string,
-    /** Contenedor con las Evidencias de la Incidencia */
-    evidence: Evidence[]
+    /** Identificador Único del Documento Asociada a la Incidencia */
+    docID: string
 };
 
 export default Incident;

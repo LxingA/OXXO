@@ -110,8 +110,17 @@
             "SLangAppTranslationViewPanelPageIncidentViewCreateInputTitleLabel": "Title",
             "SLangAppTranslationViewPanelPageIncidentViewCreateInputTitleMessage": "A clear title for the incident",
             "SLangAppTranslationIncidentStatus0Label": "Pending",
+            "SLangAppTranslationIncidentStatus1Label": "Reviewing",
+            "SLangAppTranslationIncidentStatus2Label": "Complete",
+            "SLangAppTranslationIncidentStatus3Label": "Cancelled",
             "SLangAppTranslationViewPanelPageIncidentPaginationLabel": "Showing %current% of %total% incidents",
-            "SLangAppTranslationViewPanelPageIncidentEvidenceContainerListEmptyLabel": "No evidence found"
+            "SLangAppTranslationViewPanelPageIncidentEvidenceContainerListEmptyLabel": "No evidence found",
+            "SLangAppTranslationViewPanelPageIncidentBoxProcessorDeleteTitle": "Erasing",
+            "SLangAppTranslationViewPanelPageIncidentBoxProcessorDeleteMessage": "Wait a moment",
+            "SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceTitle": "Follow Up to the Incident",
+            "SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceMessageText": "Please write the follow-up that is being given to the incident",
+            "SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceButtonLabel": "Update|Updating...",
+            "SLangAppTranslationViewPanelPageIncidentBoxMediaContentTitle": "You are viewing: <strong>%FILE_NAME%</strong>"
         }
     },
     "es": {
@@ -225,8 +234,17 @@
             "SLangAppTranslationViewPanelPageIncidentViewCreateInputFilesLabel": "Imágenes o Documentos en PDF [Máximo 4]",
             "SLangAppTranslationViewPanelPageIncidentViewCreateButtonLabel": "Crear la Incidencia|Creando...",
             "SLangAppTranslationIncidentStatus0Label": "Pendiente",
+            "SLangAppTranslationIncidentStatus1Label": "Revisando",
+            "SLangAppTranslationIncidentStatus2Label": "Completado",
+            "SLangAppTranslationIncidentStatus3Label": "Cancelado",
             "SLangAppTranslationViewPanelPageIncidentPaginationLabel": "Mostrando %current% de las %total% incidencias",
-            "SLangAppTranslationViewPanelPageIncidentEvidenceContainerListEmptyLabel": "No se encontró ninguna evidencia"
+            "SLangAppTranslationViewPanelPageIncidentEvidenceContainerListEmptyLabel": "No se encontró ninguna evidencia",
+            "SLangAppTranslationViewPanelPageIncidentBoxProcessorDeleteTitle": "Borrando",
+            "SLangAppTranslationViewPanelPageIncidentBoxProcessorDeleteMessage": "Espere un momento",
+            "SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceTitle": "Seguimiento a la Incidencia",
+            "SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceMessageText": "Favor de escribir el seguimiento que se le está dando a la incidencia",
+            "SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceButtonLabel": "Actualizar|Actualizando...",
+            "SLangAppTranslationViewPanelPageIncidentBoxMediaContentTitle": "Estás visualizando: <strong>%FILE_NAME%</strong>"
         }
     }
 }
