@@ -79,8 +79,8 @@ const Incident = () => {
                 pathname == "/order_incident" ? (
                     <Fragment>
                         <div className="unlistIncidencias">
-                            {data[page - 1]["map"](({title,id,status,message,date,information,order,user,docID},iterator) => (
-                                <ComponentIncidentListView key={iterator} id={docID} order={order?.["split"](",")} user={{name:information["name"]??information["email"]!,role:t(information["title"]!),photo:information!["photo"]??Domain("user/default.webp"),id:user}} createdAt={date} description={message} title={title} uniqKey={id} statusID={status}/>
+                            {data[page - 1]["map"](({title,id,status,message,date,information,order,user,docID,log},iterator) => (
+                                <ComponentIncidentListView key={iterator} log={log} id={docID} order={order?.["split"](",")} user={{name:information["name"]??information["email"]!,role:t(information["title"]!),photo:information!["photo"]??Domain("user/default.webp"),id:user}} createdAt={date} description={message} title={title} uniqKey={id} statusID={status}/>
                             ))}
                         </div>
                         {(data["length"] >= 2) && (

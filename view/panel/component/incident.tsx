@@ -13,7 +13,7 @@ import {Context as Authentication} from '../../../context/auth';
 import type {Timestamp} from 'firebase/firestore';
 import type {SetStateAction,Dispatch} from 'react';
 import type {RoleGroup} from '../../../type/auth';
-import type {BoxProcessor,BoxMedia} from '../type/incident';
+import type {BoxProcessor,BoxMedia,History} from '../type/incident';
 import Domain from '../../../util/domain';
 import Timer from 'moment';
 
@@ -61,7 +61,7 @@ export const ComponentIncidentEmptyView = ({title,message}:{
 };
 
 /** Componente para Mostrar la Vista de la Incidencia en Modo Listado */
-export const ComponentIncidentListView = ({title,uniqKey,statusID,description,createdAt,user,order,id}:{
+export const ComponentIncidentListView = ({title,uniqKey,statusID,description,createdAt,user,order,id,log}:{
     /** Definir el Titulo para Mostrar en el Componente */
     title: string,
     /** Definir la ID Única de la Incidencia en el Componente */
@@ -86,7 +86,9 @@ export const ComponentIncidentListView = ({title,uniqKey,statusID,description,cr
     /** Contenedor con los Pedidos Asociadas a la Incidencia para el Componente */
     order?: string[],
     /** Identificador Único del Documento Asociada a la Incidencia para el Componente */
-    id: string
+    id: string,
+    /** Contenedor con el Historial de la Incidencia */
+    log: History[]
 }) => {
     const {t} = useTranslation();
     const {information} = useContext(Authentication);
@@ -95,7 +97,12 @@ export const ComponentIncidentListView = ({title,uniqKey,statusID,description,cr
     const [boxMedia,setBoxMedia] = useState<BoxMedia>();
     const permission = (['xink'] as RoleGroup)["includes"](information!["role"]!);
     const maxLength = 42;
-    return (
+    const statusColor = {
+        0: "pending",
+        1: "inreview",
+        2: "complete",
+        3: "cancelled"
+    };return (
         <div className={(["oxxo"] as RoleGroup)["includes"](information!["role"]!) ? "box viewoxxo" : "box"}>
             {boxProcess && (
                 <div className="ProcesoDiv">
@@ -110,13 +117,13 @@ export const ComponentIncidentListView = ({title,uniqKey,statusID,description,cr
                 </div>
             )}
             {boxFollow && (
-                <AddonComponentIncidentBoxUpdateIncidence callback={setBoxFollow}/>
+                <AddonComponentIncidentBoxUpdateIncidence history={log} status={statusID} id={id} callback={setBoxFollow}/>
             )}
             {boxMedia && (
                 <AddonComponentIncidentBoxMediaShowContent {...boxMedia}/>
             )}
             <div className="boxing IDIncd">
-                <div className="statusBarra Pendiente"></div>
+                <div className={`statusBarra ${statusColor[statusID]}`}></div>
                 {(['xink'] as RoleGroup)["includes"](information!["role"]!) && (
                     <AddonComponentIncidentListViewUserInfoBox role={user["role"]} name={user["name"]} photo={user["photo"]}/>
                 )}

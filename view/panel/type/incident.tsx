@@ -40,6 +40,18 @@ export type BoxMedia = {
     mime: string
 };
 
+/** Prototipo para la Definición del Objeto con la Información del Historial de las Incidencias */
+export type History = {
+    /** Número de Estatus para el Historial de la Incidencia */
+    status: number,
+    /** Mensaje Descriptivo del Seguimiento a la Incidencia */
+    message: string,
+    /** Fecha de Generación del Seguimiento de la Incidencia */
+    date: Timestamp,
+    /** ID Único del Usuario que ha Creado el Historial de la Incidencia */
+    user: string
+};
+
 /** Prototipo con la Definición del Objeto con la Información de una Incidencia */
 interface Incident {
     /** Definición del Titulo para la Incidencia */
@@ -59,7 +71,9 @@ interface Incident {
     /** Pedidos Asociadas a la Incidencia */
     order: string,
     /** Identificador Único del Documento Asociada a la Incidencia */
-    docID: string
+    docID: string,
+    /** Contenedor con el Historial de Actualizaciones de la Incidencia */
+    log: History[]
 };
 
 export default Incident;

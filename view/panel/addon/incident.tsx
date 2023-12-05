@@ -7,12 +7,14 @@
 */
 import {useEffect,useState,useContext} from 'react';
 import {ref,listAll,getDownloadURL,getMetadata,deleteObject} from 'firebase/storage';
-import {doc,deleteDoc} from 'firebase/firestore';
+import {doc,deleteDoc,updateDoc,Timestamp} from 'firebase/firestore';
 import {Context as Authentication} from '../../../context/auth';
 import {Context as Service} from '../../../context/service';
 import {useTranslation} from 'react-i18next';
-import type {Evidence,BoxProcessor,BoxMedia} from '../type/incident';
+import {useNavigate} from 'react-router-dom';
+import type {Evidence,BoxProcessor,BoxMedia,History} from '../type/incident';
 import type {MouseEvent,SetStateAction,Dispatch} from 'react';
+import type {ValidityInput} from '../../login/type/form';
 import Domain from "../../../util/domain";
 import Loader from '../../loader';
 
@@ -29,6 +31,7 @@ export const AddonComponentIncidentButtonsListView = ({id,uniqKey,box}:{
     const {user} = useContext(Authentication);
     const {firebase} = useContext(Service);
     const [exec,setExec] = useState<boolean>(false);
+    const navigator = useNavigate();
     const handler = async($event:MouseEvent<HTMLButtonElement>) => {
         $event["preventDefault"]();
         setExec(true);
@@ -46,7 +49,7 @@ export const AddonComponentIncidentButtonsListView = ({id,uniqKey,box}:{
                 <button onClick={handler} disabled={exec}>
                     <i className="uil uil-trash-alt"></i>
                 </button>
-                <button className="streng" disabled={exec}>
+                <button className="streng" disabled={exec} onClick={() => navigator(`/order_incident/view?key=${uniqKey}`,{replace:true})}>
                     <i className="uil uil-file-search-alt"></i>
                 </button>
             </div>
@@ -138,13 +141,39 @@ export const AddonComponentIncidentListViewUserInfoBox = ({name,role,photo}:{
 };
 
 /** Componente para Mostrar el Formulario para el Seguimiento de la Incidencia */
-export const AddonComponentIncidentBoxUpdateIncidence = ({callback}:{
+export const AddonComponentIncidentBoxUpdateIncidence = ({callback,id,status,history}:{
     /** Referencía al Callback para Mostrar la Caja Actual */
-    callback: Dispatch<SetStateAction<boolean>>
+    callback: Dispatch<SetStateAction<boolean>>,
+    /** Identificador Único del Documento Asociado a la Incidencia */
+    id: string,
+    /** Valor Actual del Estatus de la Incidencia */
+    status: number,
+    /** Contenedor con el Historial de la Incidencia */
+    history: History[]
 }) => {
     const {t} = useTranslation();
+    const {user} = useContext(Authentication);
+    const {firebase} = useContext(Service);
+    const [loading,setLoading] = useState<boolean>(false);
+    const [message,setMessage] = useState<ValidityInput>({value:undefined});
+    const [statusNew,setStatus] = useState<number>(status);
     const buttonLabel = t("SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceButtonLabel")["split"]("|");
-    return (
+    const handler = async($event:MouseEvent<HTMLButtonElement>) => {
+        $event["preventDefault"]();
+        setLoading(true);
+        const $history = history;
+        $history["push"]({
+            message: message["value"],
+            status: statusNew,
+            date: Timestamp["fromDate"](new Date()),
+            user: user!["uid"]
+        } as History);
+        (await updateDoc(doc(firebase!["database"],"incident",id),{
+            log: $history,
+            status: statusNew
+        }));
+        callback(false);
+    };return (
         <div className="containerTxTStatus">
             <div className="contextualStatus">
                 <button className="closeuo" onClick={() => callback(false)}>
@@ -153,8 +182,19 @@ export const AddonComponentIncidentBoxUpdateIncidence = ({callback}:{
                 <h3>
                     {t("SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceTitle")}
                 </h3>
-                <textarea placeholder={t("SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceMessageText")}/>
-                <select>
+                <textarea placeholder={t("SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceMessageText")} onChange={$event => setMessage($state => {
+                    let $current = $state;
+                    if($event["target"]["value"]["length"] === 0) $current = {value:undefined};
+                    else{
+                        if($event["target"]["value"]["length"] <= 8) $current["check"] = "invalid";
+                        else if($event["target"]["value"]["length"] >= 200) $current["check"] = "invalid";
+                        else{
+                            $current["check"] = "valid";
+                            $current["value"] = $event["target"]["value"];
+                        }
+                    }return {...$current};
+                })}/>
+                <select defaultValue={status} onChange={$event => setStatus(Number($event["target"]["value"]))}>
                     <option value="0">
                         {t("SLangAppTranslationIncidentStatus0Label")}
                     </option>
@@ -168,8 +208,8 @@ export const AddonComponentIncidentBoxUpdateIncidence = ({callback}:{
                         {t("SLangAppTranslationIncidentStatus3Label")}
                     </option>
                 </select>
-                <button className="full">
-                    {buttonLabel[0]}
+                <button className="full" onClick={handler} disabled={loading || (message["check"] == "invalid" || typeof message["value"] == "undefined")}>
+                    {loading ? buttonLabel[1] : buttonLabel[0]}
                 </button>
             </div>
         </div>
