@@ -10,10 +10,12 @@ import {collection,where,query,onSnapshot,orderBy,doc,getDoc} from 'firebase/fir
 import {Context as Authentication} from '../../../context/auth';
 import {Context as Service} from '../../../context/service';
 import {ComponentIncidentEmptyView,ComponentIncidentListView,ComponentIncidentListViewPagination} from '../component/incident';
+import {AddonComponentIncidentBoxMediaShowContent} from '../addon/incident';
 import {useTranslation} from 'react-i18next';
-import {Outlet,useLocation,useNavigate} from 'react-router-dom';
+import {Outlet,useLocation,useNavigate,useSearchParams} from 'react-router-dom';
 import type {QueryFieldFilterConstraint} from 'firebase/firestore';
 import type {RoleGroup} from '../../../type/auth';
+import type {BoxMedia} from '../type/incident';
 import type IncidentPrototype from '../type/incident';
 import Domain from '../../../util/domain';
 import Loader from "../../loader";
@@ -25,10 +27,12 @@ const Incident = () => {
     const {firebase} = useContext(Service);
     const {pathname} = useLocation();
     const {information,user} = useContext(Authentication);
+    const [boxMedia,setBoxMedia] = useState<BoxMedia>();
     const [page,setPage] = useState<number>(1);
     const [total,setTotal] = useState<number>(0);
     const [data,setData] = useState<IncidentPrototype[][]>();
     const [error,setError] = useState<string>();
+    const [search] = useSearchParams();
     const navigator = useNavigate();
     useEffect(() => {
         $(".ctnMainPatern")["addClass"]("Incidencias");
@@ -63,6 +67,9 @@ const Incident = () => {
         </div>
     ) : (
         <Fragment>
+            {boxMedia && (
+                <AddonComponentIncidentBoxMediaShowContent {...boxMedia}/>
+            )}
             {((["oxxo","codeink"] as RoleGroup)["includes"](information!["role"]!) && pathname == "/order_incident") && (
                 <div className="flexie right">
                     <button className="full" disabled={typeof data == "undefined"} onClick={_ => navigator("/order_incident/create")}>
@@ -80,7 +87,7 @@ const Incident = () => {
                     <Fragment>
                         <div className="unlistIncidencias">
                             {data[page - 1]["map"](({title,id,status,message,date,information,order,user,docID,log},iterator) => (
-                                <ComponentIncidentListView key={iterator} log={log} id={docID} order={order?.["split"](",")} user={{name:information["name"]??information["email"]!,role:t(information["title"]!),photo:information!["photo"]??Domain("user/default.webp"),id:user}} createdAt={date} description={message} title={title} uniqKey={id} statusID={status}/>
+                                <ComponentIncidentListView key={iterator} callback={setBoxMedia} log={log} id={docID} order={order?.["split"](",")} user={{name:information["name"]??information["email"]!,role:t(information["title"]!),photo:information!["photo"]??Domain("user/default.webp"),id:user}} createdAt={date} description={message} title={title} uniqKey={id} statusID={status}/>
                             ))}
                         </div>
                         {(data["length"] >= 2) && (
@@ -88,7 +95,7 @@ const Incident = () => {
                         )}
                     </Fragment>
                 ) : ((["oxxo","codeink"] as RoleGroup)["includes"](information!["role"]!)) ? (
-                    <Outlet context={{handlers:{setError},currentPage:page}}/>
+                    <Outlet context={{handlers:{setError,setBoxMedia},currentPage:page,incident:(search["has"]("key"))?(data[page - 1]["filter"](({id}) => search["get"]("key") == id)[0]):null}}/>
                 ) : (
                     <div className="Annoucement">
                         <ComponentIncidentEmptyView title={t("SLangAppTranslationViewPanelPageIncidentRestrictViewTitle")} message={t("SLangAppTranslationViewPanelPageIncidentRestrictViewMessage")}/>

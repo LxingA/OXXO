@@ -8,7 +8,7 @@
 import {Fragment,useContext,useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {AddonComponentIncidentButtonsListView,AddonComponentIncidentListViewUserInfoBox,AddonComponentIncidentEvidenceListView} from '../addon/incident';
-import {AddonComponentIncidentBoxUpdateIncidence,AddonComponentIncidentBoxMediaShowContent} from '../addon/incident';
+import {AddonComponentIncidentBoxUpdateIncidence} from '../addon/incident';
 import {Context as Authentication} from '../../../context/auth';
 import type {Timestamp} from 'firebase/firestore';
 import type {SetStateAction,Dispatch} from 'react';
@@ -61,7 +61,7 @@ export const ComponentIncidentEmptyView = ({title,message}:{
 };
 
 /** Componente para Mostrar la Vista de la Incidencia en Modo Listado */
-export const ComponentIncidentListView = ({title,uniqKey,statusID,description,createdAt,user,order,id,log}:{
+export const ComponentIncidentListView = ({title,uniqKey,statusID,description,createdAt,user,order,id,log,callback}:{
     /** Definir el Titulo para Mostrar en el Componente */
     title: string,
     /** Definir la ID Única de la Incidencia en el Componente */
@@ -88,13 +88,14 @@ export const ComponentIncidentListView = ({title,uniqKey,statusID,description,cr
     /** Identificador Único del Documento Asociada a la Incidencia para el Componente */
     id: string,
     /** Contenedor con el Historial de la Incidencia */
-    log: History[]
+    log: History[],
+    /** Callback para Mostrar el Visualizador de Evidencias de la Incidencia */
+    callback: Dispatch<SetStateAction<BoxMedia | undefined>>
 }) => {
     const {t} = useTranslation();
     const {information} = useContext(Authentication);
     const [boxProcess,setBoxProcess] = useState<BoxProcessor>();
     const [boxFollow,setBoxFollow] = useState<boolean>(false);
-    const [boxMedia,setBoxMedia] = useState<BoxMedia>();
     const permission = (['xink'] as RoleGroup)["includes"](information!["role"]!);
     const maxLength = 42;
     const statusColor = {
@@ -103,8 +104,8 @@ export const ComponentIncidentListView = ({title,uniqKey,statusID,description,cr
         2: "complete",
         3: "cancelled"
     };return (
-        <div className={(["oxxo"] as RoleGroup)["includes"](information!["role"]!) ? "box viewoxxo" : "box"}>
-            {boxProcess && (
+        <div className={(["oxxo"] as RoleGroup)["includes"](information!["role"]!) ? "box viewoxxo" : "box viewxink"}>
+            {(boxProcess && boxProcess["id"] == uniqKey) && (
                 <div className="ProcesoDiv">
                     <div className="ctn">
                         <h3>
@@ -118,9 +119,6 @@ export const ComponentIncidentListView = ({title,uniqKey,statusID,description,cr
             )}
             {boxFollow && (
                 <AddonComponentIncidentBoxUpdateIncidence history={log} status={statusID} id={id} callback={setBoxFollow}/>
-            )}
-            {boxMedia && (
-                <AddonComponentIncidentBoxMediaShowContent {...boxMedia}/>
             )}
             <div className="boxing IDIncd">
                 <div className={`statusBarra ${statusColor[statusID]}`}></div>
@@ -158,20 +156,22 @@ export const ComponentIncidentListView = ({title,uniqKey,statusID,description,cr
                     </p>
                 </div>
             </div>
-            {order && (
-                <div className="boxing idinc">
-                    <div className="ctnn">
-                        {order["map"]((id,uniqKey) => (
-                            <span key={uniqKey}>
-                                {id}
-                            </span>
-                        ))}
-                        <strong>
-                            {t("SLangAppTranslationViewPanelPageIncidentBoxListOrderLabel")}
-                        </strong>
-                    </div>
+            <div className="boxing idinc">
+                <div className="ctnn">
+                    {order ? order["map"]((id,uniqKey) => (
+                        <span key={uniqKey}>
+                            {id}
+                        </span>
+                    )) : (
+                        <span>
+                            {t("SLangAppTranslationViewPanelPageIncidentBoxListOrderEmptyMessage")}
+                        </span>
+                    )}
+                    <strong>
+                        {t("SLangAppTranslationViewPanelPageIncidentBoxListOrderLabel")}
+                    </strong>
                 </div>
-            )}
+            </div>
             <div className="boxing fcha">
                 <div className="ctnn">
                     <strong>
@@ -190,10 +190,10 @@ export const ComponentIncidentListView = ({title,uniqKey,statusID,description,cr
                 </div>
             </div>
             {(['oxxo'] as RoleGroup)["includes"](information!["role"]!) && (
-                <AddonComponentIncidentButtonsListView id={id} uniqKey={uniqKey} box={setBoxProcess}/>
+                <AddonComponentIncidentButtonsListView status={statusID} id={id} uniqKey={uniqKey} box={setBoxProcess}/>
             )}
             {permission && (
-                <AddonComponentIncidentEvidenceListView box={setBoxMedia} id={uniqKey} user={user["id"]}/>
+                <AddonComponentIncidentEvidenceListView box={callback} id={uniqKey} user={user["id"]}/>
             )}
         </div>
     );

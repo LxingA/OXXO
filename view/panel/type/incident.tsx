@@ -24,7 +24,9 @@ export type BoxProcessor = {
     /** Titulo para Mostrar en el Procesor */
     title: string,
     /** Mensaje para Mostrar en el Procesor */
-    message: string
+    message: string,
+    /** Identificador Único de la Incidencia Actual */
+    id: string
 };
 
 /** Prototipo para la Definición del Objeto para la Caja con los Medios */

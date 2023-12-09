@@ -41,15 +41,15 @@ const Create = () => {
             max: 50
         },
         osoxxo_input_incident_description: {
-            min: 6,
-            max: 100
+            min: 8,
+            max: 300
         },
         osoxxo_input_incident_orders: {
             min: 1,
             max: 100
         }
     };
-    const mimes = "image/png,image/webp,image/jpeg,application/pdf";
+    const mimes = "image/png,image/webp,image/jpeg,application/pdf,video/mp4";
     const [resource,setResource] = useState<File[] | null>(null);
     const [values,setValues] = useState<Record<string,ValidityInput>>(initialState);
     const [loading,setLoading] = useState<boolean>(false);
@@ -76,26 +76,28 @@ const Create = () => {
         const savedReferenceUUIDIncident = v4()["split"]("-")[4]["substring"](0,5);
         $event["preventDefault"]();
         setLoading(true);
-        const files = async() => (Promise["all"](resource!["map"](async(reference) => (await uploadBytes(ref(firebase!["storage"],`i/${user!["uid"]}/${savedReferenceUUIDIncident}/${v4()}`),reference,{customMetadata:{name:reference["name"],mime:reference["type"]}})))));try{
+        const files = async() => (Promise["all"](resource!["map"](async(reference) => (await uploadBytes(ref(firebase!["storage"],`i/${user!["uid"]}/${savedReferenceUUIDIncident}/${v4()}`),reference,{customMetadata:{name:reference["name"],mime:reference["type"]}})))));
+        try{
             let $__definedInitialObject = {
                 date: Timestamp["fromDate"](new Date()),
                 title: values["osoxxo_input_incident_title"]["value"],
                 id: savedReferenceUUIDIncident,
                 user: user!["uid"],
                 status: 0,
-                message: values["osoxxo_input_incident_description"]["value"]
+                message: values["osoxxo_input_incident_description"]["value"],
+                log: []
             };
             if(values["osoxxo_input_incident_orders"]["value"]) $__definedInitialObject["order"] = values["osoxxo_input_incident_orders"]["value"];
             (await addDoc(collection(firebase!["database"],"incident"),$__definedInitialObject));
             (resource && resource["length"] <= 4 && resource["length"] >= 1) && await files();
-            navigator("/order_incident",{replace:true});
+            navigator("..",{replace:true,relative:"path"});
         }catch(_){
             handlers["setError"](t("SLangAppTranslationViewPanelPageIncidentErrorMessage"));
         }
     };
     const buttonLabel = t("SLangAppTranslationViewPanelPageIncidentViewCreateButtonLabel")["split"]("|");
     useEffect(() => {
-        const $handler__ESC = $k => $k["code"] == "Escape" && navigator("/order_incident",{replace:true});
+        const $handler__ESC = $k => $k["code"] == "Escape" && navigator("..",{replace:true,relative:"path"});
         document["addEventListener"]("keydown",$handler__ESC,true);
         return () => {
             document["removeEventListener"]("keydown",$handler__ESC,true);
@@ -106,7 +108,7 @@ const Create = () => {
             <div className="contentForm">
                 <button className="closeuo" onClick={$event => {
                     $event["preventDefault"]();
-                    navigator("/order_incident",{replace:true});
+                    navigator("..",{replace:true,relative:"path"});
                 }}>
                     <i className="uil uil-times"></i>
                 </button>
@@ -121,12 +123,12 @@ const Create = () => {
                         <textarea disabled={loading} name="osoxxo_input_incident_description" onChange={$change} placeholder={t("SLangAppTranslationViewPanelPageIncidentViewCreateInputDescriptionMessage")}/>
                     }/>
                     <ComponentIncidentCreateBox require={false} label={t("SLangAppTranslationViewPanelPageIncidentViewCreateInputOrdersLabel")} content={
-                        <input disabled={loading} name="osoxxo_input_incident_orders" onChange={$change} type="text" placeholder="97313,56100,31000"/>
+                        <input disabled={loading} name="osoxxo_input_incident_orders" onChange={$change} type="text" placeholder="97313,56100,31000,51400"/>
                     }/>
-                    <ComponentIncidentCreateBox require={false} label="Evidencias" content={
+                    <ComponentIncidentCreateBox require={false} label={t("SLangAppTranslationViewPanelPageIncidentViewInformationEvidenceLabel")} content={
                         <Fragment>
                             <label>
-                                <input max={4} onChange={$event => setResource(Object["values"]($event["target"]["files"]!)["filter"]($=>$ instanceof File))} disabled={loading} accept={mimes} multiple name="osoxxo_input_incident_resources" type="file"/>
+                                <input onChange={$event => setResource(Object["values"]($event["target"]["files"]!)["filter"]($=>($ instanceof File && $["size"] <= 10485760 && mimes["split"](",")["includes"]($["type"]))))} disabled={loading} accept={mimes} multiple name="osoxxo_input_incident_resources" type="file"/>
                                 <div className="boxoUpload">
                                     <div className="ctn">
                                         <i className="uil uil-cloud-upload"></i>

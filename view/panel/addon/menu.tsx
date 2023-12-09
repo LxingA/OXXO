@@ -16,9 +16,13 @@ export const ButtonSignOut = ({firebaseAuth}:{
     /** Referencía a la Instancía de Firebase Auth With Identity Platform */
     firebaseAuth: Auth
 }) => {
+    const {t} = useTranslation();
     return (
         <button className="deconexion" onClick={() => signOut(firebaseAuth)}>
             <i className="uil uil-signout"></i>
+            <span>
+                {t("SLangAppTranslationViewMainMenuLoginLogoutLabel")}
+            </span>
         </button>
     );
 };

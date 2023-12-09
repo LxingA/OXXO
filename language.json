@@ -99,13 +99,14 @@
             "SLangAppTranslationViewPanelPageIncidentBoxListMessageLabel": "Description",
             "SLangAppTranslationViewPanelPageIncidentBoxListTitleLabel": "Title",
             "SLangAppTranslationViewPanelPageIncidentBoxListOrderLabel": "Orders",
+            "SLangAppTranslationViewPanelPageIncidentBoxListOrderEmptyMessage": "there are no associated orders",
             "SLangAppTranslationViewPanelPageIncidentErrorTitle": "Unexpected Error",
             "SLangAppTranslationViewPanelPageIncidentErrorMessage": "There was an unknown error processing the request. Contact the Developer",
             "SLangAppTranslationViewPanelPageIncidentButtonCreateNewIncidentLabel": "Create an Incident",
             "SLangAppTranslationViewPanelPageIncidentViewCreateButtonLabel": "Create the Incident|Creating...",
             "SLangAppTranslationViewPanelPageIncidentViewCreateInputDescriptionLabel": "Description",
             "SLangAppTranslationViewPanelPageIncidentViewCreateInputDescriptionMessage": "Please describe the incident clearly",
-            "SLangAppTranslationViewPanelPageIncidentViewCreateInputFilesLabel": "Images or PDF Documents [Maximum 4]",
+            "SLangAppTranslationViewPanelPageIncidentViewCreateInputFilesLabel": "Images, Videos or PDF Documents [Maximum 4 per 10MB each]",
             "SLangAppTranslationViewPanelPageIncidentViewCreateInputOrdersLabel": "Associated Orders",
             "SLangAppTranslationViewPanelPageIncidentViewCreateInputTitleLabel": "Title",
             "SLangAppTranslationViewPanelPageIncidentViewCreateInputTitleMessage": "A clear title for the incident",
@@ -120,7 +121,14 @@
             "SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceTitle": "Follow Up to the Incident",
             "SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceMessageText": "Please write the follow-up that is being given to the incident",
             "SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceButtonLabel": "Update|Updating...",
-            "SLangAppTranslationViewPanelPageIncidentBoxMediaContentTitle": "You are viewing: <strong>%FILE_NAME%</strong>"
+            "SLangAppTranslationViewPanelPageIncidentBoxMediaContentTitle": "You are viewing: <strong>%FILE_NAME%</strong>",
+            "SLangAppTranslationViewMainMenuLoginLogoutLabel": "Logout",
+            "SLangAppTranslationViewPanelPageIncidentViewInformationReportLabel": "Report #$ID$",
+            "SLangAppTranslationViewPanelPageIncidentViewInformationEvidenceLabel": "Evidence",
+            "SLangAppTranslationViewPanelPageIncidentViewInformationGeneralLabel": "General information",
+            "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryLabel": "Incident History",
+            "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryEmptyTitle": "No Tracking",
+            "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryEmptyMessage": "Your incident has not yet been followed up"
         }
     },
     "es": {
@@ -223,6 +231,7 @@
             "SLangAppTranslationViewPanelPageIncidentBoxListDateLabel": "Fecha",
             "SLangAppTranslationViewPanelPageIncidentBoxListMessageLabel": "Descripción",
             "SLangAppTranslationViewPanelPageIncidentBoxListOrderLabel": "Pedidos",
+            "SLangAppTranslationViewPanelPageIncidentBoxListOrderEmptyMessage": "no hay pedidos asociados",
             "SLangAppTranslationViewPanelPageIncidentErrorTitle": "Error Inesperado",
             "SLangAppTranslationViewPanelPageIncidentErrorMessage": "Hubo un error desconocido al procesar lo solicitado. Contacte con el Desarrollador",
             "SLangAppTranslationViewPanelPageIncidentButtonCreateNewIncidentLabel": "Crear una Incidencia",
@@ -231,7 +240,7 @@
             "SLangAppTranslationViewPanelPageIncidentViewCreateInputDescriptionLabel": "Descripción",
             "SLangAppTranslationViewPanelPageIncidentViewCreateInputDescriptionMessage": "Favor de describir la incidencia con claridad",
             "SLangAppTranslationViewPanelPageIncidentViewCreateInputOrdersLabel": "Pedidos Asociados",
-            "SLangAppTranslationViewPanelPageIncidentViewCreateInputFilesLabel": "Imágenes o Documentos en PDF [Máximo 4]",
+            "SLangAppTranslationViewPanelPageIncidentViewCreateInputFilesLabel": "Imágenes, Vídeos o Documentos en PDF [Máximo 4 por 10MB cada uno]",
             "SLangAppTranslationViewPanelPageIncidentViewCreateButtonLabel": "Crear la Incidencia|Creando...",
             "SLangAppTranslationIncidentStatus0Label": "Pendiente",
             "SLangAppTranslationIncidentStatus1Label": "Revisando",
@@ -244,7 +253,14 @@
             "SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceTitle": "Seguimiento a la Incidencia",
             "SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceMessageText": "Favor de escribir el seguimiento que se le está dando a la incidencia",
             "SLangAppTranslationViewPanelPageIncidentBoxUpdateIncidenceButtonLabel": "Actualizar|Actualizando...",
-            "SLangAppTranslationViewPanelPageIncidentBoxMediaContentTitle": "Estás visualizando: <strong>%FILE_NAME%</strong>"
+            "SLangAppTranslationViewPanelPageIncidentBoxMediaContentTitle": "Estás visualizando: <strong>%FILE_NAME%</strong>",
+            "SLangAppTranslationViewMainMenuLoginLogoutLabel": "Desconectarse",
+            "SLangAppTranslationViewPanelPageIncidentViewInformationReportLabel": "Reporte #$ID$",
+            "SLangAppTranslationViewPanelPageIncidentViewInformationGeneralLabel": "Información General",
+            "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryLabel": "Historial de la Incidencia",
+            "SLangAppTranslationViewPanelPageIncidentViewInformationEvidenceLabel": "Evidencias",
+            "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryEmptyTitle": "Ningún Seguimiento",
+            "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryEmptyMessage": "Todavía no se le ha dado seguimiento a tu incidencia"
         }
     }
 }

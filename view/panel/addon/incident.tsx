@@ -5,27 +5,32 @@
 @description Complementos para el Componente de las Incidencias de la Aplicación
 @date 28/11/23 22:20
 */
-import {useEffect,useState,useContext} from 'react';
+import {useEffect,useState,useContext, Fragment} from 'react';
 import {ref,listAll,getDownloadURL,getMetadata,deleteObject} from 'firebase/storage';
-import {doc,deleteDoc,updateDoc,Timestamp} from 'firebase/firestore';
+import {doc,deleteDoc,updateDoc,Timestamp, getDoc} from 'firebase/firestore';
 import {Context as Authentication} from '../../../context/auth';
 import {Context as Service} from '../../../context/service';
 import {useTranslation} from 'react-i18next';
 import {useNavigate} from 'react-router-dom';
+import {upperStringFirst} from '../../../util/extra';
 import type {Evidence,BoxProcessor,BoxMedia,History} from '../type/incident';
+import type {UserFromDatabaseInformation} from '../../../type/auth';
 import type {MouseEvent,SetStateAction,Dispatch} from 'react';
 import type {ValidityInput} from '../../login/type/form';
 import Domain from "../../../util/domain";
 import Loader from '../../loader';
+import Timer from 'moment';
 
 /** Complemento con los Botones de Acción de la Vista Listadora de las Incidencias */
-export const AddonComponentIncidentButtonsListView = ({id,uniqKey,box}:{
+export const AddonComponentIncidentButtonsListView = ({id,uniqKey,box,status}:{
     /** Identificador Único del Documento Asociada a la Incidencia */
     id: string,
     /** Identificador Único de la Incidencia */
     uniqKey: string,
     /** Referencía a la Callback para Mostrar la Caja del Procesor */
-    box: Dispatch<SetStateAction<BoxProcessor | undefined>>
+    box: Dispatch<SetStateAction<BoxProcessor | undefined>>,
+    /** Estatus Actual de la Incidencia */
+    status: number
 }) => {
     const {t} = useTranslation();
     const {user} = useContext(Authentication);
@@ -37,18 +42,22 @@ export const AddonComponentIncidentButtonsListView = ({id,uniqKey,box}:{
         setExec(true);
         box({
             title: t("SLangAppTranslationViewPanelPageIncidentBoxProcessorDeleteTitle"),
-            message: t("SLangAppTranslationViewPanelPageIncidentBoxProcessorDeleteMessage")
+            message: t("SLangAppTranslationViewPanelPageIncidentBoxProcessorDeleteMessage"),
+            id: uniqKey
         });
         (await Promise["all"](
             (await listAll(ref(firebase!["storage"],`i/${user!["uid"]}/${uniqKey}`)))["items"]["map"](async({storage,fullPath}) => await deleteObject(ref(storage,fullPath)))
         ));
         (await deleteDoc(doc(firebase!["database"],"incident",id)));
+        setExec(false);
     };return (
         <div className="boxing actions">
             <div className="accioneslist">
-                <button onClick={handler} disabled={exec}>
-                    <i className="uil uil-trash-alt"></i>
-                </button>
+                {!(([1,2] as number[])["includes"](status)) && (
+                    <button onClick={handler} disabled={exec}>
+                        <i className="uil uil-trash-alt"></i>
+                    </button>
+                )}
                 <button className="streng" disabled={exec} onClick={() => navigator(`/order_incident/view?key=${uniqKey}`,{replace:true})}>
                     <i className="uil uil-file-search-alt"></i>
                 </button>
@@ -162,7 +171,7 @@ export const AddonComponentIncidentBoxUpdateIncidence = ({callback,id,status,his
         $event["preventDefault"]();
         setLoading(true);
         const $history = history;
-        $history["push"]({
+        $history["unshift"]({
             message: message["value"],
             status: statusNew,
             date: Timestamp["fromDate"](new Date()),
@@ -237,5 +246,52 @@ export const AddonComponentIncidentBoxMediaShowContent = ({name,type,callback,mi
                 </div>
             </div>
         </div>
+    );
+};
+
+/** Componente para Mostrar el Historial de las Incidencias */
+export const AddonComponentIncidentPageInformationHistoryContent = ({status,date,message,user}:History) => {
+    const {t} = useTranslation();
+    const {firebase} = useContext(Service);
+    const [userInfo,setUserInfo] = useState<UserFromDatabaseInformation>();
+    const handler = async() => {
+        const __initialUser__ = (await getDoc(doc(firebase!["database"],`user/${user}`)));
+        if(__initialUser__["exists"]()) setUserInfo(__initialUser__["data"]());
+    };useEffect(() => {
+        !userInfo && handler();
+    },[]);
+    return (
+        <Fragment>
+            <div className="incidenciaResponsable">
+                {userInfo ? (
+                    <Fragment>
+                        <div className="iconUser">
+                            <img src={userInfo["photo"] ?? Domain("user/default.webp")}/>
+                        </div>
+                        <div className="userdts">
+                            <strong>
+                                {userInfo["name"] ? userInfo["name"]!["split"](" ")[0] : userInfo["email"]}
+                            </strong>
+                            <p className="Rango designWeb">
+                                {upperStringFirst(userInfo["role"]!)}
+                            </p>
+                        </div>
+                    </Fragment>
+                ) : <Loader />}
+            </div>
+            <div className="col2">
+                <div className="titleinc2">
+                    <h2>
+                        {t(`SLangAppTranslationIncidentStatus${status}Label`)}
+                    </h2>
+                    <p>
+                        {Timer(date["toDate"]()["toISOString"]())["format"]("DD/MM/YY H:mm")}
+                    </p>
+                </div>
+                <p>
+                    {message}
+                </p>
+            </div>
+        </Fragment>
     );
 };
