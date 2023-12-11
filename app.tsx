@@ -18,6 +18,8 @@ import PanelPageAccount from './view/panel/page/account';
 import ErrorPagePanel from './view/panel/page/error';
 import ErrorPageAuth from './view/login/page/error';
 import ActionTemplate from './view/action';
+import PanelPageToolViewIndex from './view/panel/page/tool';
+import PanelPageToolViewOrder from './view/panel/page/tool_order';
 import PanelPageIncidentViewAdd from './view/panel/page/order_incident_create';
 import PanelPageIncidentViewOnly from './view/panel/page/order_incident_view';
 
@@ -37,6 +39,9 @@ const App = () => {
                     <Route path="view" element={<PanelPageIncidentViewOnly />}/>
                 </Route>
                 <Route path="account" element={<PanelPageAccount />}/>
+                <Route path="tool" element={<PanelPageToolViewIndex />}>
+                    <Route path="order" element={<PanelPageToolViewOrder />}/>
+                </Route>
                 <Route path="*" element={<ErrorPagePanel />}/>
             </Route>
             <Route path="do" element={<ActionTemplate />}/>

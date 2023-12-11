@@ -33,6 +33,7 @@
             "SLangAppTranslationViewPanelPageCheckTile": "Order Review",
             "SLangAppTranslationViewPanelPageIncidentTitle": "Incidents in Orders",
             "SLangAppTranslationViewPanelPageAccountTitle": "Account Editing",
+            "SLangAppTranslationViewPanelPageToolTitle": "Work Tools",
             "SLangAppTranslationViewPanelNavbarGreetingLabel": "Hi",
             "SLangAppTranslationViewPanelPanelIndexContainerServiceButtonLabel": "Visualize",
             "SLangAppTranslationViewPanelPageIndexContainerServiceTitle": "¿What do you need to do today?",
@@ -128,7 +129,15 @@
             "SLangAppTranslationViewPanelPageIncidentViewInformationGeneralLabel": "General information",
             "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryLabel": "Incident History",
             "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryEmptyTitle": "No Tracking",
-            "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryEmptyMessage": "Your incident has not yet been followed up"
+            "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryEmptyMessage": "Your incident has not yet been followed up",
+            "SLangAppTranslationViewPanelPageToolNavLinkAddressLabel": "Addresses",
+            "SLangAppTranslationViewPanelPageToolNavLinkOrderLabel": "Orders",
+            "SLangAppTranslationViewPanelPageToolDescription": "Essential Tools for Xink",
+            "SLangAppTranslationViewPanelPageToolNavBarShowingLabel": "Show|Orders",
+            "SLangAppTranslationViewPanelPageToolNavBarInputSearchLabel": "Search for an order",
+            "SLangAppTranslationViewPanelPageToolNavBarButtonCreateOrderLabel": "Register an Order",
+            "SLangAppTranslationViewPanelPageToolFooterPaginationLabel": "Showing %ITEM% of %TOTAL% Orders",
+            "SLangAppTranslationViewPanelPageToolFooterPaginationEmptyLabel": "No order found"
         }
     },
     "es": {
@@ -165,6 +174,7 @@
             "SLangAppTranslationViewPanelPageCheckTile": "Revisión de Pedidos",
             "SLangAppTranslationViewPanelPageIncidentTitle": "Incidencias en los Pedidos",
             "SLangAppTranslationViewPanelPageAccountTitle": "Edición de Cuentas",
+            "SLangAppTranslationViewPanelPageToolTitle": "Herramientas de Trabajo",
             "SLangAppTranslationViewPanelNavbarGreetingLabel": "Hola",
             "SLangAppTranslationViewPanelPanelIndexContainerServiceButtonLabel": "Visualizar",
             "SLangAppTranslationViewPanelPageIndexContainerServiceTitle": "¿Qué necesitas hacer hoy?",
@@ -260,7 +270,15 @@
             "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryLabel": "Historial de la Incidencia",
             "SLangAppTranslationViewPanelPageIncidentViewInformationEvidenceLabel": "Evidencias",
             "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryEmptyTitle": "Ningún Seguimiento",
-            "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryEmptyMessage": "Todavía no se le ha dado seguimiento a tu incidencia"
+            "SLangAppTranslationViewPanelPageIncidentViewInformationHistoryEmptyMessage": "Todavía no se le ha dado seguimiento a tu incidencia",
+            "SLangAppTranslationViewPanelPageToolNavLinkOrderLabel": "Pedidos",
+            "SLangAppTranslationViewPanelPageToolNavLinkAddressLabel": "Direcciones",
+            "SLangAppTranslationViewPanelPageToolDescription": "Herramientas Esenciales para Xink",
+            "SLangAppTranslationViewPanelPageToolNavBarShowingLabel": "Mostrar|Pedidos",
+            "SLangAppTranslationViewPanelPageToolNavBarInputSearchLabel": "Buscar un pedido",
+            "SLangAppTranslationViewPanelPageToolNavBarButtonCreateOrderLabel": "Registrar un Pedido",
+            "SLangAppTranslationViewPanelPageToolFooterPaginationLabel": "Mostrando %ITEM% de %TOTAL% Pedidos",
+            "SLangAppTranslationViewPanelPageToolFooterPaginationEmptyLabel": "No se encontró ningún pedido"
         }
     }
 }

@@ -34,6 +34,9 @@ const Index = () => {
             case "account":
                 document["title"] = `${t("SLangAppTranslationViewPanelPageAccountTitle")} - ${name}`;
             break;
+            case "tool":
+                document["title"] = `${t("SLangAppTranslationViewPanelPageToolTitle")} - ${name}`;
+            break;
             default:
                 if(pathname == "/") document["title"] = `${t("SLangAppTranslationViewPanelPageIndexTitle")} - ${name}`;
                 else document["title"] = `${t("SLangAppTranslationViewErrorPageGlobalTitle")} - ${name}`;

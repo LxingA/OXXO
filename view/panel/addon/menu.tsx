@@ -5,9 +5,11 @@
 @description Complementos para el Componente con el Menú Principal del Panel de Control
 @date 18/11/23 13:00
 */
+import {useContext} from 'react';
 import {signOut} from 'firebase/auth';
 import {NavLink,Link,useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import {Context as Authentication} from '../../../context/auth';
 import type {Auth} from 'firebase/auth';
 import $ from 'jquery';
 
@@ -49,6 +51,7 @@ export const PhotoCircle = ({userDefault,userPhoto}:{
 /** Complemento con el Contenedor de las Páginas del Panel de Control */
 export const Navbar = () => {
     const {t} = useTranslation();
+    const {user,information} = useContext(Authentication);
     const handler = () => window["matchMedia"]("(min-width:250px) and (max-width:1080px)")["matches"] && $(".navPanelPrimary")["toggleClass"]("active");
     return (
         <div className="menupanelctn">
@@ -76,6 +79,14 @@ export const Navbar = () => {
                     {t("SLangAppTranslationViewPanelPageIncidentTitle")}
                 </span>
             </NavLink>
+            {user && (information!["role"] == "xink" && (
+                <NavLink to="/tool" onClick={handler}>
+                    <i className="uil uil-wrench"></i>
+                    <span>
+                        {t("SLangAppTranslationViewPanelPageToolTitle")}
+                    </span>
+                </NavLink>
+            ))}
         </div>
     );
 };
