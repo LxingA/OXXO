@@ -137,7 +137,20 @@
             "SLangAppTranslationViewPanelPageToolNavBarInputSearchLabel": "Search for an order",
             "SLangAppTranslationViewPanelPageToolNavBarButtonCreateOrderLabel": "Register an Order",
             "SLangAppTranslationViewPanelPageToolFooterPaginationLabel": "Showing %ITEM% of %TOTAL% Orders",
-            "SLangAppTranslationViewPanelPageToolFooterPaginationEmptyLabel": "No order found"
+            "SLangAppTranslationViewPanelPageToolFooterPaginationEmptyLabel": "No order found",
+            "SLangAppTranslationViewPanelPageToolTableColumnActionLabel": "Actions",
+            "SLangAppTranslationViewPanelPageToolTableColumnDateCreatedLabel": "Registration Date",
+            "SLangAppTranslationViewPanelPageToolTableColumnDateFinishLabel": "End Date",
+            "SLangAppTranslationViewPanelPageToolTableColumnIDLabel": "Order",
+            "SLangAppTranslationViewPanelPageToolTableColumnReasonLabel": "Reason",
+            "SLangAppTranslationViewPanelPageToolTableColumnShopLabel": "Store",
+            "SLangAppTranslationViewPanelPageToolTabelReasoneQdugVPHLabel":"Long Address",
+            "SLangAppTranslationViewPanelPageToolTabelReasongNuNCpgSLabel": "Revision",
+            "SLangAppTranslationViewPanelPageToolTabelReasonJoKyzBgDLabel": "Postal Code",
+            "SLangAppTranslationViewPanelPageToolTabelReasonLMoGkEnhLabel": "Unknown",
+            "SLangAppTranslationViewPanelPageToolTabelReasonSPRKhnMVLabel": "OCCURS",
+            "SLangAppTranslationViewPanelPageToolTabelButtonRegisterOrderLabel": "Register|Registering...",
+            "SLangAppTranslationViewPanelPageToolTableColumnDateFinishNotEndeedMessage": "Has not been completed"
         }
     },
     "es": {
@@ -278,7 +291,20 @@
             "SLangAppTranslationViewPanelPageToolNavBarInputSearchLabel": "Buscar un pedido",
             "SLangAppTranslationViewPanelPageToolNavBarButtonCreateOrderLabel": "Registrar un Pedido",
             "SLangAppTranslationViewPanelPageToolFooterPaginationLabel": "Mostrando %ITEM% de %TOTAL% Pedidos",
-            "SLangAppTranslationViewPanelPageToolFooterPaginationEmptyLabel": "No se encontró ningún pedido"
+            "SLangAppTranslationViewPanelPageToolFooterPaginationEmptyLabel": "No se encontró ningún pedido",
+            "SLangAppTranslationViewPanelPageToolTableColumnIDLabel": "Pedido",
+            "SLangAppTranslationViewPanelPageToolTableColumnShopLabel": "Tienda",
+            "SLangAppTranslationViewPanelPageToolTableColumnDateCreatedLabel": "Fecha Registro",
+            "SLangAppTranslationViewPanelPageToolTableColumnDateFinishLabel": "Fecha Finalizado",
+            "SLangAppTranslationViewPanelPageToolTableColumnReasonLabel": "Motivo",
+            "SLangAppTranslationViewPanelPageToolTableColumnActionLabel": "Acciones",
+            "SLangAppTranslationViewPanelPageToolTabelReasonJoKyzBgDLabel": "Código Postal",
+            "SLangAppTranslationViewPanelPageToolTabelReasonSPRKhnMVLabel": "OCURRE",
+            "SLangAppTranslationViewPanelPageToolTabelReasongNuNCpgSLabel": "Revisión",
+            "SLangAppTranslationViewPanelPageToolTabelReasoneQdugVPHLabel": "Dirección Larga",
+            "SLangAppTranslationViewPanelPageToolTabelReasonLMoGkEnhLabel": "Desconocido",
+            "SLangAppTranslationViewPanelPageToolTabelButtonRegisterOrderLabel": "Registrar|Registrando...",
+            "SLangAppTranslationViewPanelPageToolTableColumnDateFinishNotEndeedMessage": "No se ha completado"
         }
     }
 }
