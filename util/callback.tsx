@@ -60,6 +60,9 @@ export const defineUserInformationObject = async(object:{},client:Firestore,uuid
         object["administrator"] = savedDataFromQueryDatabase["administrator"];
         object["role"] = savedDataFromQueryDatabase["role"];
         object["title"] = savedDataFromQueryDatabase["title"];
+        object["name"] = savedDataFromQueryDatabase["name"];
+        object["email"] = savedDataFromQueryDatabase["email"];
+        object["photo"] = savedDataFromQueryDatabase["photo"];
         return object;
     }else return object;
 };

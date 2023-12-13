@@ -150,7 +150,8 @@
             "SLangAppTranslationViewPanelPageToolTabelReasonLMoGkEnhLabel": "Unknown",
             "SLangAppTranslationViewPanelPageToolTabelReasonSPRKhnMVLabel": "OCCURS",
             "SLangAppTranslationViewPanelPageToolTabelButtonRegisterOrderLabel": "Register|Registering...",
-            "SLangAppTranslationViewPanelPageToolTableColumnDateFinishNotEndeedMessage": "Has not been completed"
+            "SLangAppTranslationViewPanelPageToolTableColumnDateFinishNotEndeedMessage": "Has not been completed",
+            "SLangAppTranslationViewPanelPageToolDateFormatLabel": "%date% by %user%"
         }
     },
     "es": {
@@ -304,7 +305,8 @@
             "SLangAppTranslationViewPanelPageToolTabelReasoneQdugVPHLabel": "Dirección Larga",
             "SLangAppTranslationViewPanelPageToolTabelReasonLMoGkEnhLabel": "Desconocido",
             "SLangAppTranslationViewPanelPageToolTabelButtonRegisterOrderLabel": "Registrar|Registrando...",
-            "SLangAppTranslationViewPanelPageToolTableColumnDateFinishNotEndeedMessage": "No se ha completado"
+            "SLangAppTranslationViewPanelPageToolTableColumnDateFinishNotEndeedMessage": "No se ha completado",
+            "SLangAppTranslationViewPanelPageToolDateFormatLabel": "%date% por %user%"
         }
     }
 }

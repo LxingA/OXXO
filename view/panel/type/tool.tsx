@@ -22,5 +22,7 @@ export type Order = {
     /** Indicar si la Orden se Encuentra Concluida */
     complete: boolean,
     /** ID Única del Documento Asociada al Pedido */
-    id: string
+    id: string,
+    /** Contenedor con los Nombres de los Miembros que Creó y Finalizó el Pedido */
+    user: string[]
 };

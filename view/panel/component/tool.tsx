@@ -5,10 +5,11 @@
 @description Componentes para la Vista de las Herramientas Xink de la Aplicación
 @date 10/12/23 17:20
 */
-import {Dispatch,SetStateAction,useState,useContext} from 'react';
+import {Dispatch,SetStateAction,useState,useContext,useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ComponentIncidentCreateBox} from '../component/incident';
-import {collection,addDoc,Timestamp} from 'firebase/firestore';
+import {collection,addDoc,Timestamp,deleteDoc,doc,updateDoc} from 'firebase/firestore';
+import {Context as Authentication} from '../../../context/auth';
 import {Context as Service} from '../../../context/service';
 import type {MouseEvent} from 'react';
 import type {Order} from '../type/tool';
@@ -16,7 +17,7 @@ import Timer from 'moment';
 import $ from 'jquery';
 
 /** Componente para Mostrar la Navegación de la Tabla de los Pedidos en Herramientas */
-export const NavBar = ({disabled,perPage,loading,box}:{
+export const NavBar = ({disabled,perPage,loading,box,searching}:{
     /** Desahibilitar las acciones en el Píe de Página */
     disabled: boolean,
     /** Contenedor con la Información para la Cantidad de Pedidos a Mostrar */
@@ -29,10 +30,13 @@ export const NavBar = ({disabled,perPage,loading,box}:{
     /** Indicar al Componente que se está Obteniendo la Información de los Pedidos */
     loading: boolean,
     /** Callback para Mostrar el Contenedor para el Registro de nuevos pedidos */
-    box: Dispatch<SetStateAction<boolean>>
+    box: Dispatch<SetStateAction<boolean>>,
+    /** Callback para Consultar un Pedido en el Buscador */
+    searching: Dispatch<SetStateAction<string | undefined>>
 }) => {
     const {t} = useTranslation();
     const showingMessage = t("SLangAppTranslationViewPanelPageToolNavBarShowingLabel")["split"]("|");
+    const referenceSearch = useRef<HTMLInputElement>(null);
     return (
         <div className="navTable">
             <label>
@@ -46,8 +50,12 @@ export const NavBar = ({disabled,perPage,loading,box}:{
             </label>
             <div className="flexright">
                 <div className="searchbox">
-                    <input type="search" placeholder={t("SLangAppTranslationViewPanelPageToolNavBarInputSearchLabel")} disabled={disabled}/>
-                    <button>
+                    <input ref={referenceSearch} onChange={$event => searching($event["target"]["value"] ?? undefined)} type="search" placeholder={t("SLangAppTranslationViewPanelPageToolNavBarInputSearchLabel")} disabled={disabled}/>
+                    <button onClick={$event => {
+                        $event["preventDefault"]();
+                        referenceSearch!["current"]!["value"] = "";
+                        searching(undefined);
+                    }}>
                         <i className="uil uil-search"></i>
                     </button>
                 </div>
@@ -65,6 +73,23 @@ export const Table = ({orders}:{
     orders: Order[]
 }) => {
     const {t} = useTranslation();
+    const {information} = useContext(Authentication);
+    const {firebase} = useContext(Service);
+    const handler = {
+        delete: async($event:MouseEvent<HTMLButtonElement>,$key:string) => {
+            $event["preventDefault"]();
+            (await deleteDoc(doc(firebase!["database"],`order/${$key}`)));
+        },
+        complete: async($event:MouseEvent<HTMLButtonElement>,$key:string,$value:boolean,$user:string[]) => {
+            $event["preventDefault"]();
+            $user["push"](information!["name"]?.split(" ")[0] ?? information!["email"]!["split"]("@")[0]);
+            (await updateDoc(doc(firebase!["database"],`order/${$key}`),{
+                complete: $value,
+                dateAtFinish: Timestamp["fromDate"](new Date()),
+                user: $user
+            }));
+        }
+    };
     return (
         <table>
             <thead>
@@ -91,7 +116,7 @@ export const Table = ({orders}:{
             </thead>
             {orders["length"] > 0 && (
                 <tbody>
-                    {orders["map"](({tienda,uniqKey,dateAtCreate,dateAtFinish,reason},iterator) => (
+                    {orders["map"](({tienda,uniqKey,dateAtCreate,dateAtFinish,reason,id,complete,user},iterator) => (
                         <tr key={iterator}>
                             <td>
                                 {uniqKey}
@@ -100,10 +125,10 @@ export const Table = ({orders}:{
                                 {tienda}
                             </td>
                             <td>
-                                {Timer(dateAtCreate["toDate"]()["toISOString"]())["format"]("DD/MM/YY H:mm")}
+                                {t("SLangAppTranslationViewPanelPageToolDateFormatLabel")["replace"]("%date%",Timer(dateAtCreate["toDate"]()["toISOString"]())["format"]("DD/MM/YY H:mm:ss"))["replace"]("%user%",user[0])}
                             </td>
                             <td>
-                                {dateAtFinish ? Timer(dateAtFinish["toDate"]()["toISOString"]())["format"]("DD/MM/YY H:mm") : t("SLangAppTranslationViewPanelPageToolTableColumnDateFinishNotEndeedMessage")}
+                                {dateAtFinish ? t("SLangAppTranslationViewPanelPageToolDateFormatLabel")["replace"]("%date%",Timer(dateAtFinish["toDate"]()["toISOString"]())["format"]("DD/MM/YY H:mm:ss"))["replace"]("%user%",user[1]) : t("SLangAppTranslationViewPanelPageToolTableColumnDateFinishNotEndeedMessage")}
                             </td>
                             <td>
                                 <strong className="status">
@@ -112,10 +137,10 @@ export const Table = ({orders}:{
                             </td>
                             <td>
                                 <div className="accioneslist">
-                                    <button>
+                                    <button onClick={$event => handler["delete"]($event,id)}>
                                         <i className="uil uil-trash-alt"></i>
                                     </button>
-                                    <button>
+                                    <button onClick={$event => handler["complete"]($event,id,!complete,user)} className={complete ? "complete" : undefined} disabled={complete}>
                                         <i className="uil uil-check"></i>
                                     </button>
                                 </div>
@@ -129,7 +154,7 @@ export const Table = ({orders}:{
 };
 
 /** Componente para Mostrar el Píe de Página de la Tabla con los Pedidos de Herramienta Xink */
-export const Footer = ({disabled,total,currentPage,limitPerPage}:{
+export const Footer = ({disabled,total,currentPage,limitPerPage,orders,callback}:{
     /** Desahibilitar las acciones en el Píe de Página */
     disabled: boolean,
     /** Número Total de los Pedidos en Incidencia */
@@ -137,7 +162,11 @@ export const Footer = ({disabled,total,currentPage,limitPerPage}:{
     /** Número de Página Actual en el Contexto */
     currentPage: number,
     /** Número Limitante de Pedidos a Mostrar por Página */
-    limitPerPage: number
+    limitPerPage: number,
+    /** Referencía al Contenedor con Todos los Pedidos en Incidencia */
+    orders?: Order[][],
+    /** Referencía al Callback para la Mutación de la Página Actual */
+    callback: Dispatch<SetStateAction<number>>
 }) => {
     const {t} = useTranslation();
     const totalPages = (Math["ceil"](total / limitPerPage));
@@ -145,22 +174,22 @@ export const Footer = ({disabled,total,currentPage,limitPerPage}:{
         <div className="finalTable">
             <div className="col1">
                 <span>
-                    {disabled ? t("SLangAppTranslationViewPanelPageToolFooterPaginationEmptyLabel") : t("SLangAppTranslationViewPanelPageToolFooterPaginationLabel")["replace"]("%ITEM%","5")["replace"]("%TOTAL%","5")}
+                    {disabled ? t("SLangAppTranslationViewPanelPageToolFooterPaginationEmptyLabel") : t("SLangAppTranslationViewPanelPageToolFooterPaginationLabel")["replace"]("%ITEM%",(currentPage == totalPages ? total["toString"]() : (limitPerPage * currentPage)["toString"]()))["replace"]("%TOTAL%",total["toString"]())}
                 </span>
             </div>
-            {currentPage >= 2 && (
+            {(orders && orders["length"] > 1) && (
                 <div className="containerPgTion">
                     <div className="pagination">
-                        <button className="previous" disabled={disabled || currentPage <= 1}>
+                        <button onClick={() => callback(1)} className="previous" disabled={disabled || currentPage <= 1}>
                             <i className="uil uil-angle-double-left"></i>
                         </button>
-                        <button className="nmbr" disabled={disabled || currentPage == 1}>
+                        <button onClick={() => callback(currentPage - 1)} className="nmbr" disabled={disabled || currentPage == 1}>
                             <i className="uil uil-arrow-left"></i>
                         </button>
-                        <button className="nmbr" disabled={disabled || (totalPages - 1) == currentPage}>
+                        <button onClick={() => callback(currentPage + 1)} className="nmbr" disabled={disabled || totalPages == currentPage}>
                             <i className="uil uil-arrow-right"></i>
                         </button>
-                        <button className="previous" disabled={disabled || currentPage >= totalPages}>
+                        <button onClick={() => callback(totalPages)} className="previous" disabled={disabled || currentPage >= totalPages}>
                             <i className="uil uil-angle-double-right"></i>
                         </button>
                     </div>
@@ -177,6 +206,7 @@ export const CardBox = ({callback}:{
 }) => {
     const {t} = useTranslation();
     const {firebase} = useContext(Service);
+    const {information} = useContext(Authentication);
     const [input,setInput] = useState<string>();
     const [loading,setLoading] = useState<boolean>(false);
     const buttonRegisterOrderLabel = t("SLangAppTranslationViewPanelPageToolTabelButtonRegisterOrderLabel")["split"]("|");
@@ -188,7 +218,8 @@ export const CardBox = ({callback}:{
             uniqKey: input!,
             dateAtCreate: Timestamp["fromDate"](new Date()),
             reason: $(`select[name="osoxxo_input_order_reason"]`)["val"](),
-            complete: false
+            complete: false,
+            user: [information!["name"]?.split(" ")[0] ?? information!["email"]!["split"]("@")[0]]
         } as Order));
         callback(false);
     };return (

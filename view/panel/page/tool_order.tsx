@@ -20,6 +20,7 @@ const Order = () => {
     const [data,setData] = useState<Order[][]>();
     const [total,setTotal] = useState<number>(0);
     const [show,setShow] = useState<boolean>(false);
+    const [search,setSearch] = useState<string>();
     useEffect(() => {
         const $__onEvented__ = onSnapshot(
             query(collection(firebase!["database"],"order"),orderBy("dateAtCreate","asc")),
@@ -43,13 +44,13 @@ const Order = () => {
     },[]);
     return (
         <div className="ctnTable">
-            <NavBar box={setShow} loading={typeof data == "undefined"} perPage={{callback:setPerPage,current:perPage}} disabled={typeof data == "undefined" || data!["length"] === 0}/>
+            <NavBar searching={setSearch} box={setShow} loading={typeof data == "undefined"} perPage={{callback:setPerPage,current:perPage}} disabled={typeof data == "undefined" || data!["length"] === 0}/>
             {data ? (
-                <Table orders={data["length"] == 0 ? [] : data[page - 1]}/>
+                <Table orders={data["length"] == 0 ? [] : (search ? data[page - 1]["filter"](({uniqKey}) => uniqKey["includes"](search)) : data[page - 1])}/>
             ) : (
                 <Loader />
             )}
-            <Footer disabled={typeof data == "undefined" || data!["length"] === 0} currentPage={page} total={total} limitPerPage={perPage}/>
+            <Footer callback={setPage} orders={data} disabled={typeof data == "undefined" || data!["length"] === 0} currentPage={page} total={total} limitPerPage={perPage}/>
             {show && (
                 <CardBox callback={setShow}/>
             )}
