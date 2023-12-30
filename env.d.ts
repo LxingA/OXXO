@@ -17,7 +17,9 @@ interface ImportMetaEnv {
     /** Ruta Absoluta HTTP para el Punto Final de los Recursos en la CDN del Proyecto */
     SGlobAppParamCDNDomain: string,
     /** Ruta Absoluta HTTP del Punto Final de la Base de Datos en Tiempo Real de Firebase */
-    SGlobAppParamRealTimeDatabaseDomain: string
+    SGlobAppParamRealTimeDatabaseDomain: string,
+    /** Definición de los Puntos Finales de las API (separadas por comas) */
+    SGlobAppParamDefinedEndPointAPI: string
 }
 interface ImportMeta {
     readonly env: ImportMetaEnv
