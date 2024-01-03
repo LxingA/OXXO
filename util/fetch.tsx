@@ -26,14 +26,14 @@ export type FetcherResponse = {
  * @param $method Método HTTP a Aplicar en la Petición
  * @param $headers Contenedor con las Cabeceras Esenciales para la Petición
  */
-const Fetcher = async($id: number, $path: string, $object: {}, $signal?: AbortSignal, $method: string = "POST", $headers: HeadersInit = {}): Promise<FetcherResponse> => {
+const Fetcher = async($id: number, $path: string, $object?: {}, $signal?: AbortSignal, $method: string = "POST", $headers: HeadersInit = {}): Promise<FetcherResponse> => {
     let $__options__: RequestInit = {};
     $__options__["mode"] = "cors";
     $__options__["cache"] = "force-cache";
     $__options__["signal"] = $signal;
     $__options__["headers"] = $headers;
     $__options__["method"] = $method;
-    $__options__["body"] = JSON["stringify"]($object);
+    if($object) $__options__["body"] = JSON["stringify"]($object);
     const $__initial__ = (await fetch(`${endpoints[$id]}${$path}`,$__options__));
     if($__initial__["ok"] || $__initial__["status"] == 200) return {
         st: true,

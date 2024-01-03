@@ -13,6 +13,7 @@ import {Context as Authentication} from '../../../context/auth';
 import {Context as Service} from '../../../context/service';
 import type {MouseEvent} from 'react';
 import type {Order} from '../type/tool';
+import Fetcher from '../../../util/fetch';
 import Timer from 'moment';
 import $ from 'jquery';
 
@@ -213,8 +214,9 @@ export const CardBox = ({callback}:{
     const Handler = async($event:MouseEvent<HTMLButtonElement>) => {
         $event["preventDefault"]();
         setLoading(true);
+        const {dt} = (await Fetcher(1,`orders?include=${input}`,undefined,undefined,"get",{authorization:`Basic ${import.meta.env.SGlobAppParamWCAuthToken}`}));
         (await addDoc(collection(firebase!["database"],"order"),{
-            tienda: "10CUE50MXN",
+            tienda: (dt as [])["length"] == 0 ? "-" : dt[0]["billing"]["first_name"],
             uniqKey: input!,
             dateAtCreate: Timestamp["fromDate"](new Date()),
             reason: $(`select[name="osoxxo_input_order_reason"]`)["val"](),

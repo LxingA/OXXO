@@ -22,9 +22,7 @@ type Service = {
     /** Contenedor con los Parámetros Esenciales para la Autenticación de la Aplicación */
     authentication?: Authentication,
     /** Estado Inicial de la Autenticación de la Aplicación */
-    auth?: Auth,
-    /** Token JWT para el Acceso a la API de Logiwa */
-    token: string
+    auth?: Auth
 };
 
 export default Service;

@@ -14,7 +14,6 @@ import {getDatabase} from 'firebase/database';
 import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager} from 'firebase/firestore';
 import {doc,collection,getDocFromCache,getDocFromServer} from 'firebase/firestore';
 import {initialObjectApplication,initialObjectAuthentication,defineUserInformationObject} from '../util/callback';
-import Fetcher from '../util/fetch';
 import type {FirebaseOptions} from 'firebase/app';
 import type Service from '../type/service';
 
@@ -43,8 +42,6 @@ const Initial = async(): Promise<Service> => {
     /** Instanciar la Autenticación de Firebase para la Aplicación */
     const authentication = getAuth(app);
     authentication["useDeviceLanguage"]();
-    /** Inicializar la Solicitud del Token de Acceso a la API de Logiwa */
-    const {dt} = await Fetcher(0,"Authorize/token",{email:"helpdesk@os-oxxo.com",password:"srNV5MkDRb4bco9C2E4TAwwO!"},undefined,"POST",{"Content-Type":"application/json"});
     /** Contenedor con los Servicios Instanciados de Firebase para la Aplicación */
     let initialState: Service = {
         firebase: {
@@ -52,8 +49,7 @@ const Initial = async(): Promise<Service> => {
             realtime: getDatabase(app),
             authentication,
             database
-        },
-        token: dt["token"]
+        }
     };
     /** Obtener la Información Inicial de la Aplicación */
     const defineRequestAppInformation = (doc(collection(database,"application"),"configuration"));
