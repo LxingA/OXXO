@@ -7,6 +7,11 @@
 */
 import type {Timestamp} from 'firebase/firestore';
 
+/** Definición del Objeto con la Información de la Dirección de una Tienda */
+export type Address = {
+
+};
+
 /** Definición del Objeto para los Pedidos en Incidencia */
 export type Order = {
     /** ID de la Tienda [CR] Asociada al Pedido */

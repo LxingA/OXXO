@@ -8,7 +8,7 @@
 import {Dispatch,SetStateAction,useState,useContext,useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ComponentIncidentCreateBox} from '../component/incident';
-import {collection,addDoc,Timestamp,deleteDoc,doc,updateDoc} from 'firebase/firestore';
+import {collection,addDoc,Timestamp,deleteDoc,doc,updateDoc,getDocs,where,query,limit} from 'firebase/firestore';
 import {Context as Authentication} from '../../../context/auth';
 import {Context as Service} from '../../../context/service';
 import type {MouseEvent} from 'react';
@@ -214,16 +214,18 @@ export const CardBox = ({callback}:{
     const Handler = async($event:MouseEvent<HTMLButtonElement>) => {
         $event["preventDefault"]();
         setLoading(true);
-        const {dt} = (await Fetcher(1,`orders?include=${input}`,undefined,undefined,"get",{authorization:`Basic ${import.meta.env.SGlobAppParamWCAuthToken}`}));
-        (await addDoc(collection(firebase!["database"],"order"),{
-            tienda: (dt as [])["length"] == 0 ? "-" : dt[0]["billing"]["first_name"],
-            uniqKey: input!,
-            dateAtCreate: Timestamp["fromDate"](new Date()),
-            reason: $(`select[name="osoxxo_input_order_reason"]`)["val"](),
-            complete: false,
-            user: [information!["name"]?.split(" ")[0] ?? information!["email"]!["split"]("@")[0]]
-        } as Order));
-        callback(false);
+        const savedReferenceExistsCurrentOrder = (await getDocs(query(collection(firebase!["database"],"order"),where("uniqKey","==",input),limit(1))));
+        if(savedReferenceExistsCurrentOrder["empty"]){
+            const {dt} = (await Fetcher(1,`orders?include=${input}`,undefined,undefined,"get",{authorization:`Basic ${import.meta.env.SGlobAppParamWCAuthToken}`}));
+            (await addDoc(collection(firebase!["database"],"order"),{
+                tienda: (dt as [])["length"] == 0 ? "-" : dt[0]["billing"]["first_name"],
+                uniqKey: input!,
+                dateAtCreate: Timestamp["fromDate"](new Date()),
+                reason: $(`select[name="osoxxo_input_order_reason"]`)["val"](),
+                complete: false,
+                user: [information!["name"]?.split(" ")[0] ?? information!["email"]!["split"]("@")[0]]
+            } as Order));
+        }callback(false);
     };return (
         <div className="PopUp CrearIncidencia CrearPedido">
             <div className="contentForm">
