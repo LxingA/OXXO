@@ -25,9 +25,6 @@ const Index = () => {
             case "order_view":
                 document["title"] = `${t("SLangAppTranslationViewPanelPageViewTitle")} - ${name}`;
             break;
-            case "order_check":
-                document["title"] = `${t("SLangAppTranslationViewPanelPageCheckTile")} - ${name}`;
-            break;
             case "order_incident":
                 document["title"] = `${t("SLangAppTranslationViewPanelPageIncidentTitle")} - ${name}`;
             break;
@@ -66,7 +63,6 @@ const Index = () => {
                             <div className="containerFlexie">
                                 <ContainerService path="/order_view" icon="file-search-alt" title={ServicesTitle[0]} description={ServicesMessage[0]}/>
                                 <ContainerService path="/order_incident" icon="analysis" title={ServicesTitle[1]} description={ServicesMessage[1]}/>
-                                <ContainerService path="/order_check" icon="file-check" title={ServicesTitle[2]} description={ServicesMessage[2]}/>
                             </div>
                         </Fragment>
                     )}

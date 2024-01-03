@@ -8,47 +8,32 @@
 import {Dispatch,SetStateAction,useState,useContext,useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ComponentIncidentCreateBox} from '../component/incident';
-import {collection,addDoc,Timestamp,deleteDoc,doc,updateDoc,getDocs,where,query,limit} from 'firebase/firestore';
+import {collection,addDoc,Timestamp,deleteDoc,doc,updateDoc,getDocs,where,query,limit,setDoc,getDoc} from 'firebase/firestore';
 import {Context as Authentication} from '../../../context/auth';
 import {Context as Service} from '../../../context/service';
 import type {MouseEvent} from 'react';
-import type {Order} from '../type/tool';
+import type {Order,Address} from '../type/tool';
 import Fetcher from '../../../util/fetch';
 import Timer from 'moment';
 import $ from 'jquery';
 
 /** Componente para Mostrar la Navegación de la Tabla de los Pedidos en Herramientas */
-export const NavBar = ({disabled,perPage,loading,box,searching}:{
+export const NavBar = ({disabled,loading,box,searching,button}:{
     /** Desahibilitar las acciones en el Píe de Página */
     disabled: boolean,
-    /** Contenedor con la Información para la Cantidad de Pedidos a Mostrar */
-    perPage: {
-        /** Número Actual de Cantidad por Página */
-        current: number,
-        /** Callback para la Mutación de la Cantidad por Página */
-        callback: Dispatch<SetStateAction<number>>
-    },
     /** Indicar al Componente que se está Obteniendo la Información de los Pedidos */
     loading: boolean,
     /** Callback para Mostrar el Contenedor para el Registro de nuevos pedidos */
-    box: Dispatch<SetStateAction<boolean>>,
+    box?: Dispatch<SetStateAction<boolean>>,
     /** Callback para Consultar un Pedido en el Buscador */
-    searching: Dispatch<SetStateAction<string | undefined>>
+    searching: Dispatch<SetStateAction<string | undefined>>,
+    /** Indica sí mostrar el bóton de acción */
+    button: boolean
 }) => {
     const {t} = useTranslation();
-    const showingMessage = t("SLangAppTranslationViewPanelPageToolNavBarShowingLabel")["split"]("|");
     const referenceSearch = useRef<HTMLInputElement>(null);
     return (
         <div className="navTable">
-            <label>
-                {showingMessage[0]}
-                <select onChange={$event => perPage["callback"](Number($event["target"]["value"]))} defaultValue={perPage["current"]} disabled={disabled}>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
-                {showingMessage[1]}
-            </label>
             <div className="flexright">
                 <div className="searchbox">
                     <input ref={referenceSearch} onChange={$event => searching($event["target"]["value"] ?? undefined)} type="search" placeholder={t("SLangAppTranslationViewPanelPageToolNavBarInputSearchLabel")} disabled={disabled}/>
@@ -60,9 +45,11 @@ export const NavBar = ({disabled,perPage,loading,box,searching}:{
                         <i className="uil uil-search"></i>
                     </button>
                 </div>
-                <button className="full" disabled={loading} onClick={() => box(true)}>
-                    <i className="uil uil-plus"></i> {t("SLangAppTranslationViewPanelPageToolNavBarButtonCreateOrderLabel")}
-                </button>
+                {button && (
+                    <button className="full" disabled={loading} onClick={() => box!(true)}>
+                        <i className="uil uil-plus"></i> {t("SLangAppTranslationViewPanelPageToolNavBarButtonCreateOrderLabel")}
+                    </button>
+                )}
             </div>
         </div>
     );
@@ -80,6 +67,7 @@ export const Table = ({orders}:{
         delete: async($event:MouseEvent<HTMLButtonElement>,$key:string) => {
             $event["preventDefault"]();
             (await deleteDoc(doc(firebase!["database"],`order/${$key}`)));
+            (deleteDoc(doc(firebase!["database"],`address/${$key}`)));
         },
         complete: async($event:MouseEvent<HTMLButtonElement>,$key:string,$value:boolean,$user:string[]) => {
             $event["preventDefault"]();
@@ -165,7 +153,7 @@ export const Footer = ({disabled,total,currentPage,limitPerPage,orders,callback}
     /** Número Limitante de Pedidos a Mostrar por Página */
     limitPerPage: number,
     /** Referencía al Contenedor con Todos los Pedidos en Incidencia */
-    orders?: Order[][],
+    orders?: Order[][] | Address[][],
     /** Referencía al Callback para la Mutación de la Página Actual */
     callback: Dispatch<SetStateAction<number>>
 }) => {
@@ -216,15 +204,44 @@ export const CardBox = ({callback}:{
         setLoading(true);
         const savedReferenceExistsCurrentOrder = (await getDocs(query(collection(firebase!["database"],"order"),where("uniqKey","==",input),limit(1))));
         if(savedReferenceExistsCurrentOrder["empty"]){
-            const {dt} = (await Fetcher(1,`orders?include=${input}`,undefined,undefined,"get",{authorization:`Basic ${import.meta.env.SGlobAppParamWCAuthToken}`}));
-            (await addDoc(collection(firebase!["database"],"order"),{
-                tienda: (dt as [])["length"] == 0 ? "-" : dt[0]["billing"]["first_name"],
+            const {dt:orders} = (await Fetcher(1,`orders?include=${input}`,undefined,undefined,"get",{authorization:`Basic ${import.meta.env.SGlobAppParamWCAuthToken}`}));
+            const conditional = (orders as [])["length"] == 0;
+            const dateAtCreated = Timestamp["fromDate"](new Date());
+            const parent = (await addDoc(collection(firebase!["database"],"order"),{
+                tienda: conditional ? "-" : orders[0]["billing"]["first_name"],
                 uniqKey: input!,
-                dateAtCreate: Timestamp["fromDate"](new Date()),
+                dateAtCreate: dateAtCreated,
                 reason: $(`select[name="osoxxo_input_order_reason"]`)["val"](),
                 complete: false,
                 user: [information!["name"]?.split(" ")[0] ?? information!["email"]!["split"]("@")[0]]
             } as Order));
+            const savedReferenceExistsCurrentAddress = (await getDocs(query(collection(firebase!["database"],"address"),where("cr","==",orders[0]["billing"]["first_name"]),limit(1))));
+            if(!conditional && savedReferenceExistsCurrentAddress["empty"]){
+                const {dt:sheet} = (await Fetcher(2,`search?cr=${orders[0]["billing"]["first_name"]}`,undefined,undefined,"get",{authorization:`Basic ${import.meta.env.SGlobAppParamSheetDBAuthToken}`}));
+                const conditional2 = (sheet as [])["length"] == 0;
+                !conditional2 && setDoc(doc(firebase!["database"],`address/${parent["id"]}`),{
+                    cr: sheet[0]["cr"],
+                    date: {
+                        created: dateAtCreated
+                    },
+                    name: sheet[0]["nombre"],
+                    position: {
+                        lat: sheet[0]["latitud"],
+                        lng: sheet[0]["longitud"]
+                    },
+                    postal: sheet[0]["postal"],
+                    street: sheet[0]["calle"],
+                    ref: sheet[0]["referencia"],
+                    identified: {
+                        ext: sheet[0]["exterior"]
+                    },
+                    colony: sheet[0]["colonia"],
+                    city: sheet[0]["ciudad"],
+                    town: sheet[0]["municipio"],
+                    state: sheet[0]["estado"],
+                    geo: false
+                } as Address);
+            }
         }callback(false);
     };return (
         <div className="PopUp CrearIncidencia CrearPedido">

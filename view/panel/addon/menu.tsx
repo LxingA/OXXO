@@ -67,12 +67,6 @@ export const Navbar = () => {
                     {t("SLangAppTranslationViewPanelPageViewTitle")}
                 </span>
             </NavLink>
-            <NavLink to="/order_check" onClick={handler}>
-                <i className="uil uil-file-check"></i>
-                <span>
-                    {t("SLangAppTranslationViewPanelPageCheckTile")}
-                </span>
-            </NavLink>
             <NavLink to="/order_incident" onClick={handler}>
                 <i className="uil uil-analysis"></i>
                 <span>

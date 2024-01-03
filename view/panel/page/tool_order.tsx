@@ -15,7 +15,7 @@ import Loader from '../../loader';
 /** Página para Mostrar el Registro de los Pedidos en Incidencia */
 const Order = () => {
     const {firebase} = useContext(Service);
-    const [perPage,setPerPage] = useState<number>(25);
+    const [perPage] = useState<number>(10);
     const [page,setPage] = useState<number>(1);
     const [data,setData] = useState<Order[][]>();
     const [total,setTotal] = useState<number>(0);
@@ -44,7 +44,7 @@ const Order = () => {
     },[]);
     return (
         <div className="ctnTable">
-            <NavBar searching={setSearch} box={setShow} loading={typeof data == "undefined"} perPage={{callback:setPerPage,current:perPage}} disabled={typeof data == "undefined" || data!["length"] === 0}/>
+            <NavBar button searching={setSearch} box={setShow} loading={typeof data == "undefined"} disabled={typeof data == "undefined" || data!["length"] === 0}/>
             {data ? (
                 <Table orders={data["length"] == 0 ? [] : (search ? data[page - 1]["filter"](({uniqKey}) => uniqKey["includes"](search)) : data[page - 1])}/>
             ) : (

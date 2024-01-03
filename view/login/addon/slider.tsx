@@ -44,7 +44,6 @@ export const Control = ({callback,viewID}:{
         <div className="NavCtn">
             <button className={viewID == 0 ? "circle active" : "circle"} onClick={() => callback(0)}></button>
             <button className={viewID == 1 ? "circle active" : "circle"} onClick={() => callback(1)}></button>
-            <button className={viewID == 2 ? "circle active" : "circle"} onClick={() => callback(2)}></button>
         </div>
     );
 };

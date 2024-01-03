@@ -12,7 +12,6 @@ import LoginPageIndex from './view/login/page';
 import LoginPageRecovery from './view/login/page/recovery';
 import PanelTemplate from './view/panel';
 import PanelPageView from './view/panel/page/order_view';
-import PanelPageReview from './view/panel/page/order_check';
 import PanelPageIncident from './view/panel/page/order_incident';
 import PanelPageAccount from './view/panel/page/account';
 import ErrorPagePanel from './view/panel/page/error';
@@ -20,6 +19,7 @@ import ErrorPageAuth from './view/login/page/error';
 import ActionTemplate from './view/action';
 import PanelPageToolViewIndex from './view/panel/page/tool';
 import PanelPageToolViewOrder from './view/panel/page/tool_order';
+import PanelPageToolViewAddress from './view/panel/page/tool_adress';
 import PanelPageIncidentViewAdd from './view/panel/page/order_incident_create';
 import PanelPageIncidentViewOnly from './view/panel/page/order_incident_view';
 
@@ -33,7 +33,6 @@ const App = () => {
                 </Auth>
             }>
                 <Route path="order_view" element={<PanelPageView />}/>
-                <Route path="order_check" element={<PanelPageReview />}/>
                 <Route path="order_incident" element={<PanelPageIncident />}>
                     <Route path="create" element={<PanelPageIncidentViewAdd />}/>
                     <Route path="view" element={<PanelPageIncidentViewOnly />}/>
@@ -41,6 +40,7 @@ const App = () => {
                 <Route path="account" element={<PanelPageAccount />}/>
                 <Route path="tool" element={<PanelPageToolViewIndex />}>
                     <Route path="order" element={<PanelPageToolViewOrder />}/>
+                    <Route path="address" element={<PanelPageToolViewAddress />}/>
                 </Route>
                 <Route path="*" element={<ErrorPagePanel />}/>
             </Route>
