@@ -143,7 +143,7 @@ export const Table = ({orders}:{
 };
 
 /** Componente para Mostrar el Píe de Página de la Tabla con los Pedidos de Herramienta Xink */
-export const Footer = ({disabled,total,currentPage,limitPerPage,orders,callback}:{
+export const Footer = ({disabled,total,currentPage,limitPerPage,orders,callback,searching}:{
     /** Desahibilitar las acciones en el Píe de Página */
     disabled: boolean,
     /** Número Total de los Pedidos en Incidencia */
@@ -155,7 +155,9 @@ export const Footer = ({disabled,total,currentPage,limitPerPage,orders,callback}
     /** Referencía al Contenedor con Todos los Pedidos en Incidencia */
     orders?: Order[][] | Address[][],
     /** Referencía al Callback para la Mutación de la Página Actual */
-    callback: Dispatch<SetStateAction<number>>
+    callback: Dispatch<SetStateAction<number>>,
+    /** Referencia al Término de Búsqueda en el Contexto */
+    searching?: string
 }) => {
     const {t} = useTranslation();
     const totalPages = (Math["ceil"](total / limitPerPage));
@@ -163,7 +165,7 @@ export const Footer = ({disabled,total,currentPage,limitPerPage,orders,callback}
         <div className="finalTable">
             <div className="col1">
                 <span>
-                    {disabled ? t("SLangAppTranslationViewPanelPageToolFooterPaginationEmptyLabel") : t("SLangAppTranslationViewPanelPageToolFooterPaginationLabel")["replace"]("%ITEM%",(currentPage == totalPages ? total["toString"]() : (limitPerPage * currentPage)["toString"]()))["replace"]("%TOTAL%",total["toString"]())}
+                    {disabled ? t("SLangAppTranslationViewPanelPageToolFooterPaginationEmptyLabel") : (searching ? t("SLangAppTranslationViewPanelPageToolSearchingLabel")["replace"]("%term%",searching) : t("SLangAppTranslationViewPanelPageToolFooterPaginationLabel")["replace"]("%ITEM%",(currentPage == totalPages ? total["toString"]() : (limitPerPage * currentPage)["toString"]()))["replace"]("%TOTAL%",total["toString"]()))}
                 </span>
             </div>
             {(orders && orders["length"] > 1) && (
@@ -232,9 +234,7 @@ export const CardBox = ({callback}:{
                     postal: sheet[0]["postal"],
                     street: sheet[0]["calle"],
                     ref: sheet[0]["referencia"],
-                    identified: {
-                        ext: sheet[0]["exterior"]
-                    },
+                    exterior: sheet[0]["exterior"],
                     colony: sheet[0]["colonia"],
                     city: sheet[0]["ciudad"],
                     town: sheet[0]["municipio"],

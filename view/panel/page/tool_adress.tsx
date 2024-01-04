@@ -5,26 +5,31 @@
 @description Vista para la Visualización de las Tiendas con sus Direcciones para su Modificación
 @date 03/01/24 13:40
 */
-import {useEffect,useState,useContext} from 'react';
+import {useEffect,useState,useContext,useRef} from 'react';
 import {useTranslation} from 'react-i18next';
+import {Context as Authentication} from '../../../context/auth';
 import {Context as Service} from '../../../context/service';
 import {Footer,NavBar} from '../component/tool';
-import {getDocs,query,collection} from 'firebase/firestore';
+import {getDocs,query,collection,doc,updateDoc,where,limit, Timestamp} from 'firebase/firestore';
+import {search as SearchHandler,random} from '../../../util/extra';
 import type {QueryConstraint} from 'firebase/firestore';
 import type {Address as AddressPrototype} from '../type/tool';
-import type {MouseEvent} from 'react';
+import type {ReactNode} from 'react';
+import Fetcher from '../../../util/fetch';
 import Loader from '../../loader';
 import Timer from 'moment';
 
 /** Vista para las Direcciones de la Tienda */
 const Address = () => {
     const {firebase} = useContext(Service);
+    const {user} = useContext(Authentication);
     const {t} = useTranslation();
     const [item,setItem] = useState<AddressPrototype[][]>();
     const [page,setPage] = useState<number>(1);
     const [total,setTotal] = useState<number>(0);
     const [search,setSearch] = useState<string>();
-    const [clickEvent,setClickEvent] = useState<string[]>([]);
+    const [input,setInput] = useState<string>();
+    const [sender,setSender] = useState<string>();
     const __init__ = async() => {
         const _definedBucketItems_: AddressPrototype[] = [];
         const _definedQueryContraints_: QueryConstraint[] = []; 
@@ -42,12 +47,57 @@ const Address = () => {
     useEffect(() => {
         !item && __init__();
     },[]);
-    const handler = ($event:MouseEvent<HTMLTableCellElement>,$value:string | number,$id:string) => {
-        $event["preventDefault"]();
+    const Editable = ({name,children,dbKey,uniqKey,keys}:{
+        /** Nombre de la Entrada para Definir */
+        name: string,
+        /** Referencia al Valor Actual */
+        children: ReactNode,
+        /** Nombre de la Llave que está en la Base de Datos */
+        dbKey: string,
+        /** ID del Documento a Actualizar en la Base de Datos */
+        uniqKey: string,
+        /** Contenedor con las Referencias Actuales del Objeto en el Contenedor Global */
+        keys: number[]
+    }) => {
+        const __input__ = () => {
+            const initialInputDOM = useRef<HTMLInputElement>(null);
+            const __handler__ = async ev => {
+                if(ev["code"] == "Enter" && String(children)["length"] > 0){
+                    if(initialInputDOM["current"] && initialInputDOM["current"]["value"] != String(children)){
+                        const __referenceIDDoc__ = (await getDocs(query(collection(firebase!["database"],"address"),where("cr","==",uniqKey),limit(1))));
+                        let __definedObjectUpdatedData__ = {date:{...__referenceIDDoc__["docs"][0]["data"]()["date"]}};
+                        __definedObjectUpdatedData__[dbKey] = String(initialInputDOM["current"]["value"])["toLocaleUpperCase"]();
+                        __definedObjectUpdatedData__["date"]["modified"] = Timestamp["fromDate"](new Date());
+                        if(!__referenceIDDoc__["empty"]) updateDoc(doc(firebase!["database"],`address/${__referenceIDDoc__["docs"][0]["id"]}`),__definedObjectUpdatedData__);
+                        let savedReferenceCurrentItems = item!;
+                        savedReferenceCurrentItems[keys[0]][keys[1]][dbKey] = String(initialInputDOM["current"]["value"])["toLocaleUpperCase"]();
+                        setItem(savedReferenceCurrentItems);
+                        setInput(undefined);
+                    }else setInput(undefined);
+                }else if(ev["code"] == "Escape") setInput(undefined);
+            };
+            useEffect(() => {
+                document["addEventListener"]("keydown",__handler__,true);
+                return () => document["removeEventListener"]("keydown",__handler__,true);
+            },[]);
+            return (
+                <input ref={initialInputDOM} type="text" placeholder={children as string} defaultValue={children as string | number}/>
+            );
+        };
+        return (input && input == name) ? (
+            <__input__ />
+        ) : (
+            <span onClick={$event => {
+                $event["preventDefault"]();
+                setInput(name);
+            }}>
+                {children}
+            </span>
+        )
     };
     return !item ? <Loader /> : (
         <div className="ctnTable Direcciones">
-            <NavBar disabled={typeof item == "undefined"} loading={typeof item == "undefined"} searching={setSearch} button={false}/>
+            <NavBar disabled={typeof item == "undefined" || item["length"] == 0} loading={typeof item == "undefined"} searching={setSearch} button={false}/>
             <div className="overflowauto">
                 <table>
                     <thead>
@@ -103,8 +153,9 @@ const Address = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {(item && item["length"] >= 1) && item[page - 1]["map"](({cr,date,name,position:{lat,lng},postal,street,ref,identified:{ext},state,town,city,message,uniqKey,colony,geo},index) => {
-                            const ckNameClickEvent = `cktr_${cr["toLowerCase"]()}`;
+                        {(item && item["length"] >= 1) && ((search ? SearchHandler({item,seachFor:"cr",keyboard:search}) : item[page - 1]) as AddressPrototype[])["map"](({cr,date,name,position:{lat,lng},postal,street,ref,exterior,state,town,city,message,uniqKey,colony,geo},index) => {
+                            const ckNameClickEvent = `cktr_${cr["toLowerCase"]()}_%type%`;
+                            const definedParamsDefault = {keys:[(page - 1),index],uniqKey:cr};
                             return (
                                 <tr key={index}>
                                     <td>
@@ -121,39 +172,58 @@ const Address = () => {
                                             {lat} {lng}
                                         </a>
                                     </td>
-                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,postal,ckNameClickEvent)}>
-                                        <a href={`https://micodigopostal.org/buscarcp.php?buscar=${postal}`} target="_blank">
+                                    <td>
+                                        <Editable {...definedParamsDefault} dbKey="postal" name={ckNameClickEvent["replace"]("%type%","cp")}>
                                             {postal}
-                                        </a>
-                                    </td>
-                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,street,ckNameClickEvent)}>
-                                        {street}
-                                    </td>
-                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,ref,ckNameClickEvent)}>
-                                        {ref}
-                                    </td>
-                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,ext,ckNameClickEvent)}>
-                                        {ext}
-                                    </td>
-                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,colony,ckNameClickEvent)}>
-                                        {colony}
-                                    </td>
-                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,city,ckNameClickEvent)}>
-                                        {city}
-                                    </td>
-                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,town,ckNameClickEvent)}>
-                                        {town}
+                                        </Editable>
                                     </td>
                                     <td>
-                                        {state}
+                                        <Editable {...definedParamsDefault} dbKey="street" name={ckNameClickEvent["replace"]("%type%","stt")}>
+                                            {street}
+                                        </Editable>
                                     </td>
-                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,message ?? "",ckNameClickEvent)}>
+                                    <td>
+                                        <Editable {...definedParamsDefault} dbKey="ref" name={ckNameClickEvent["replace"]("%type%","ref")}>
+                                            {ref}
+                                        </Editable>
+                                    </td>
+                                    <td>
+                                        <Editable {...definedParamsDefault} dbKey="exterior" name={ckNameClickEvent["replace"]("%type%","ext")}>
+                                            {exterior}
+                                        </Editable>
+                                    </td>
+                                    <td>
+                                        <Editable {...definedParamsDefault} dbKey="colony" name={ckNameClickEvent["replace"]("%type%","cly")}>
+                                            {colony}
+                                        </Editable>
+                                    </td>
+                                    <td>
+                                        <Editable {...definedParamsDefault} dbKey="city" name={ckNameClickEvent["replace"]("%type%","cty")}>
+                                            {city}
+                                        </Editable>
+                                    </td>
+                                    <td>
+                                        <Editable {...definedParamsDefault} dbKey="town" name={ckNameClickEvent["replace"]("%type%","twn")}>
+                                            {town}
+                                        </Editable>
+                                    </td>
+                                    <td>
+                                        <Editable {...definedParamsDefault} dbKey="state" name={ckNameClickEvent["replace"]("%type%","ste")}>
+                                            {state}
+                                        </Editable>
+                                    </td>
+                                    <td>
                                         <strong className="status">
-                                            {message ?? "Ninguna"}
+                                            <Editable {...definedParamsDefault} dbKey="message" name={ckNameClickEvent["replace"]("%type%","msg")}>
+                                                {message ?? "NINGÚNA"}
+                                            </Editable>
                                         </strong>
                                     </td>
                                     <td>
-                                        <input style={{display:"none"}} type="checkbox" defaultChecked={geo} id={`chkbx_${cr["toLowerCase"]()}`}/>
+                                        <input onChange={$event => getDocs(query(collection(firebase!["database"],"address"),where("cr","==",cr),limit(1)))["then"]($response => {
+                                            if($response["empty"]) return;
+                                            else updateDoc(doc(firebase!["database"],`address/${$response["docs"][0]["id"]}`),{geo:$event["target"]["checked"]});
+                                        })} style={{display:"none"}} type="checkbox" defaultChecked={geo} id={`chkbx_${cr["toLowerCase"]()}`}/>
                                         <label className="minicircle" htmlFor={`chkbx_${cr["toLowerCase"]()}`}></label>
                                     </td>
                                     <td>
@@ -163,7 +233,35 @@ const Address = () => {
                                     </td>
                                     <td>
                                         <div className="accioneslist">
-                                            <button className="complete">
+                                            <button disabled={sender == ckNameClickEvent["replace"]("%type%","button")} className="complete" onClick={async $event => {
+                                                $event["preventDefault"]();
+                                                setSender(ckNameClickEvent["replace"]("%type%","button"));
+                                                const $savedReferenceCurrentObject = item[page - 1][index];
+                                                const $savedGeneratedUniqKeyForSender: string = random();
+                                                const instanceObjectSenderData = {
+                                                    "entry.1473258985": user!["displayName"] ?? "Anónimo",
+                                                    "entry.2130995873": $savedReferenceCurrentObject["cr"],
+                                                    "entry.1466865007": $savedReferenceCurrentObject["name"],
+                                                    "entry.559830909": $savedReferenceCurrentObject["street"],
+                                                    "entry.252729587": $savedReferenceCurrentObject["ref"],
+                                                    "entry.1684290615": $savedReferenceCurrentObject["exterior"]["toString"](),
+                                                    "entry.168691576": $savedReferenceCurrentObject["postal"]["toString"](),
+                                                    "entry.1275738002": $savedReferenceCurrentObject["colony"],
+                                                    "entry.944249480": $savedReferenceCurrentObject["town"],
+                                                    "entry.1285683543": $savedReferenceCurrentObject["city"],
+                                                    "entry.2062349072": $savedReferenceCurrentObject["message"] ?? "Ninguna",
+                                                    "entry.636966400": $savedReferenceCurrentObject["geo"] ? "Sí" : "No",
+                                                    "entry.1581330481": $savedGeneratedUniqKeyForSender
+                                                };
+                                                const {st} = (await Fetcher(3,"",instanceObjectSenderData,undefined,"post",{"Content-Type":"application/x-www-form-urlencoded"}));
+                                                if(st){
+                                                    const $requestedCurrentDocumentID = (await getDocs(query(collection(firebase!["database"],"address"),where("cr","==",cr),limit(1))));
+                                                    updateDoc(doc(firebase!["database"],`address/${$requestedCurrentDocumentID["docs"][0]["id"]}`),{uniqKey:$savedGeneratedUniqKeyForSender});
+                                                    let $savedReferenceCurrentItemContainer = item;
+                                                    $savedReferenceCurrentItemContainer[page - 1][index]["uniqKey"] = $savedGeneratedUniqKeyForSender;
+                                                    setSender(undefined);
+                                                }else setSender(undefined);
+                                            }}>
                                                 <i className="uil uil-message"></i>
                                             </button>
                                         </div>
@@ -174,7 +272,7 @@ const Address = () => {
                     </tbody>
                 </table>
             </div>
-            <Footer disabled={typeof item == "undefined"} total={total} currentPage={page} limitPerPage={10} orders={item} callback={setPage}/>
+            <Footer searching={search} disabled={typeof item == "undefined" || item["length"] == 0} total={total} currentPage={page} limitPerPage={10} orders={item} callback={setPage}/>
         </div>
     )
 };

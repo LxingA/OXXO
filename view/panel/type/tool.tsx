@@ -35,11 +35,8 @@ export type Address = {
     street: string,
     /** Referencías de la Tienda */
     ref: string,
-    /** Contenedor con los Identificadores de la Tienda */
-    identified: {
-        /** Número Exterior */
-        ext: number
-    },
+    /** Número Exterior de la Tienda */
+    exterior: number,
     /** Colonia de la Tienda */
     colony: string,
     /** Ciudad de la Tienda */

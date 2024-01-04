@@ -165,7 +165,8 @@
             "SLangAppTranslationViewPanelPageToolAddressLabelRef": "References",
             "SLangAppTranslationViewPanelPageToolAddressLabelState": "State",
             "SLangAppTranslationViewPanelPageToolAddressLabelStreet": "Main Street",
-            "SLangAppTranslationViewPanelPageToolAddressLabelTwn": "Town"
+            "SLangAppTranslationViewPanelPageToolAddressLabelTwn": "Town",
+            "SLangAppTranslationViewPanelPageToolSearchingLabel": "Search results \"%term%\""
         }
     },
     "es": {
@@ -334,7 +335,8 @@
             "SLangAppTranslationViewPanelPageToolAddressLabelMessage": "Observaciones",
             "SLangAppTranslationViewPanelPageToolAddressLabelGeo": "Geolocalización",
             "SLangAppTranslationViewPanelPageToolAddressLabelForm": "Formulario",
-            "SLangAppTranslationViewPanelPageToolAddressLabelButtons": "Acciones"
+            "SLangAppTranslationViewPanelPageToolAddressLabelButtons": "Acciones",
+            "SLangAppTranslationViewPanelPageToolSearchingLabel": "Resultados de la búsqueda \"%term%\""
         }
     }
 }
