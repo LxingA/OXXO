@@ -12,6 +12,7 @@ import {Footer,NavBar} from '../component/tool';
 import {getDocs,query,collection} from 'firebase/firestore';
 import type {QueryConstraint} from 'firebase/firestore';
 import type {Address as AddressPrototype} from '../type/tool';
+import type {MouseEvent} from 'react';
 import Loader from '../../loader';
 import Timer from 'moment';
 
@@ -23,6 +24,7 @@ const Address = () => {
     const [page,setPage] = useState<number>(1);
     const [total,setTotal] = useState<number>(0);
     const [search,setSearch] = useState<string>();
+    const [clickEvent,setClickEvent] = useState<string[]>([]);
     const __init__ = async() => {
         const _definedBucketItems_: AddressPrototype[] = [];
         const _definedQueryContraints_: QueryConstraint[] = []; 
@@ -40,6 +42,9 @@ const Address = () => {
     useEffect(() => {
         !item && __init__();
     },[]);
+    const handler = ($event:MouseEvent<HTMLTableCellElement>,$value:string | number,$id:string) => {
+        $event["preventDefault"]();
+    };
     return !item ? <Loader /> : (
         <div className="ctnTable Direcciones">
             <NavBar disabled={typeof item == "undefined"} loading={typeof item == "undefined"} searching={setSearch} button={false}/>
@@ -98,70 +103,74 @@ const Address = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {(item && item["length"] >= 1) && item[page - 1]["map"](({cr,date,name,position:{lat,lng},postal,street,ref,identified:{ext},state,town,city,message,uniqKey,colony,geo},index) => (
-                            <tr key={index}>
-                                <td>
-                                    {cr}
-                                </td>
-                                <td title={("modified" in date) ? Timer(date["modified"]!["toDate"]()["toISOString"]())["format"]("DD/MM/YY H:mm:ss") : "Sin Modificación"}>
-                                    {Timer(date["created"]["toDate"]()["toISOString"]())["format"]("DD/MM/YY H:mm:ss")}
-                                </td>
-                                <td>
-                                    {name}
-                                </td>
-                                <td>
-                                    <a href={`https://www.google.com/maps/place/${lat}+${lng}`} target="_blank">
-                                        {lat} {lng}
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href={`https://micodigopostal.org/buscarcp.php?buscar=${postal}`} target="_blank">
-                                        {postal}
-                                    </a>
-                                </td>
-                                <td>
-                                    {street}
-                                </td>
-                                <td>
-                                    {ref}
-                                </td>
-                                <td>
-                                    {ext}
-                                </td>
-                                <td>
-                                    {colony}
-                                </td>
-                                <td>
-                                    {city}
-                                </td>
-                                <td>
-                                    {town}
-                                </td>
-                                <td>
-                                    {state}
-                                </td>
-                                <td>
-                                    <strong className="status">
-                                        {message ?? "Ninguna"}
-                                    </strong>
-                                </td>
-                                <td>
-                                    <input type="checkbox" defaultChecked={geo}/>
-                                </td>
-                                <td>
-                                    <strong className="status">
-                                        {uniqKey ?? "No Envíado"}
-                                    </strong>
-                                </td>
-                                <td>
-                                    <div className="accioneslist">
-                                        <button className="complete">
-                                            <i className="uil uil-message"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                        {(item && item["length"] >= 1) && item[page - 1]["map"](({cr,date,name,position:{lat,lng},postal,street,ref,identified:{ext},state,town,city,message,uniqKey,colony,geo},index) => {
+                            const ckNameClickEvent = `cktr_${cr["toLowerCase"]()}`;
+                            return (
+                                <tr key={index}>
+                                    <td>
+                                        {cr}
+                                    </td>
+                                    <td title={("modified" in date) ? Timer(date["modified"]!["toDate"]()["toISOString"]())["format"]("DD/MM/YY H:mm:ss") : "Sin Modificación"}>
+                                        {Timer(date["created"]["toDate"]()["toISOString"]())["format"]("DD/MM/YY H:mm:ss")}
+                                    </td>
+                                    <td>
+                                        {name}
+                                    </td>
+                                    <td>
+                                        <a href={`https://www.google.com/maps/place/${lat}+${lng}`} target="_blank">
+                                            {lat} {lng}
+                                        </a>
+                                    </td>
+                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,postal,ckNameClickEvent)}>
+                                        <a href={`https://micodigopostal.org/buscarcp.php?buscar=${postal}`} target="_blank">
+                                            {postal}
+                                        </a>
+                                    </td>
+                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,street,ckNameClickEvent)}>
+                                        {street}
+                                    </td>
+                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,ref,ckNameClickEvent)}>
+                                        {ref}
+                                    </td>
+                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,ext,ckNameClickEvent)}>
+                                        {ext}
+                                    </td>
+                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,colony,ckNameClickEvent)}>
+                                        {colony}
+                                    </td>
+                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,city,ckNameClickEvent)}>
+                                        {city}
+                                    </td>
+                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,town,ckNameClickEvent)}>
+                                        {town}
+                                    </td>
+                                    <td>
+                                        {state}
+                                    </td>
+                                    <td onClick={clickEvent["includes"](ckNameClickEvent) ? undefined : $ => handler($,message ?? "",ckNameClickEvent)}>
+                                        <strong className="status">
+                                            {message ?? "Ninguna"}
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <input style={{display:"none"}} type="checkbox" defaultChecked={geo} id={`chkbx_${cr["toLowerCase"]()}`}/>
+                                        <label className="minicircle" htmlFor={`chkbx_${cr["toLowerCase"]()}`}></label>
+                                    </td>
+                                    <td>
+                                        <strong className="status">
+                                            {uniqKey ?? "No Envíado"}
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <div className="accioneslist">
+                                            <button className="complete">
+                                                <i className="uil uil-message"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })}
                     </tbody>
                 </table>
             </div>
