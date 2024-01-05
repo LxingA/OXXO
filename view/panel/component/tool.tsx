@@ -219,7 +219,8 @@ export const CardBox = ({callback}:{
             } as Order));
             const savedReferenceExistsCurrentAddress = (await getDocs(query(collection(firebase!["database"],"address"),where("cr","==",orders[0]["billing"]["first_name"]),limit(1))));
             if(!conditional && savedReferenceExistsCurrentAddress["empty"]){
-                const {dt:sheet} = (await Fetcher(2,`search?cr=${orders[0]["billing"]["first_name"]}`,undefined,undefined,"get",{authorization:`Basic ${import.meta.env.SGlobAppParamSheetDBAuthToken}`}));
+                const environmentSheetDB: Record<string,{token:string,key:string}> = JSON["parse"](import.meta.env.SGlobAppParamSheetDBKeys);
+                const {dt:sheet} = (await Fetcher(2,`${environmentSheetDB["tiendas"]["key"]}/search?cr=${orders[0]["billing"]["first_name"]}`,undefined,undefined,"get",{authorization:`Basic ${environmentSheetDB["tiendas"]["key"]}`}));
                 const conditional2 = (sheet as [])["length"] == 0;
                 !conditional2 && setDoc(doc(firebase!["database"],`address/${parent["id"]}`),{
                     cr: sheet[0]["cr"],

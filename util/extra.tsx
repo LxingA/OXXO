@@ -26,7 +26,7 @@ export const search = ({item,seachFor,keyboard}:{
 /** Función para generar un texto aleatorio */
 export const random = ($longitud:number = 8): string => {
     let __init__: string = "";
-    const __container__: string[] = ["qazxswedcvfrtgbnhyujmkiloñppñloikujmyhntgbrfvecdwsxqaz","ÑPLOKIMJUNHYBGTVFRCDEXSWZAQQAZWSXEDCRFVTGBYHNUJMIKOLPÑ","09876543211234567890"];
+    const __container__: string[] = ["qazxswedcvfrtgbnhyujmkilopploikujmyhntgbrfvecdwsxqaz","PLOKIMJUNHYBGTVFRCDEXSWZAQQAZWSXEDCRFVTGBYHNUJMIKOLP","09876543211234567890"];
     for(let $y = 0; $y <= ($longitud - 1); $y++){
         let __savedReferenceContainerID__ = __container__[Math["round"](Math["random"]() * (__container__["length"] - 1))];
         __init__ += __savedReferenceContainerID__[Math["round"](Math["random"]() * (__savedReferenceContainerID__["length"] - 1))]

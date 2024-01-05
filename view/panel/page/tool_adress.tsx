@@ -236,31 +236,30 @@ const Address = () => {
                                             <button disabled={sender == ckNameClickEvent["replace"]("%type%","button")} className="complete" onClick={async $event => {
                                                 $event["preventDefault"]();
                                                 setSender(ckNameClickEvent["replace"]("%type%","button"));
+                                                const $savedReferenceDBSheetKeys: Record<string,{token:string,key:string}> = JSON["parse"](import.meta.env.SGlobAppParamSheetDBKeys);
                                                 const $savedReferenceCurrentObject = item[page - 1][index];
-                                                const $savedGeneratedUniqKeyForSender: string = random();
-                                                const instanceObjectSenderData = {
-                                                    "entry.1473258985": user!["displayName"] ?? "Anónimo",
-                                                    "entry.2130995873": $savedReferenceCurrentObject["cr"],
-                                                    "entry.1466865007": $savedReferenceCurrentObject["name"],
-                                                    "entry.559830909": $savedReferenceCurrentObject["street"],
-                                                    "entry.252729587": $savedReferenceCurrentObject["ref"],
-                                                    "entry.1684290615": $savedReferenceCurrentObject["exterior"]["toString"](),
-                                                    "entry.168691576": $savedReferenceCurrentObject["postal"]["toString"](),
-                                                    "entry.1275738002": $savedReferenceCurrentObject["colony"],
-                                                    "entry.944249480": $savedReferenceCurrentObject["town"],
-                                                    "entry.1285683543": $savedReferenceCurrentObject["city"],
-                                                    "entry.2062349072": $savedReferenceCurrentObject["message"] ?? "Ninguna",
-                                                    "entry.636966400": $savedReferenceCurrentObject["geo"] ? "Sí" : "No",
-                                                    "entry.1581330481": $savedGeneratedUniqKeyForSender
+                                                const $savedGeneratedUniqKeyForSender: string = random(32);
+                                                const $requestedCurrentDocumentID = (await getDocs(query(collection(firebase!["database"],"address"),where("cr","==",cr),limit(1))));
+                                                let $definedSavedObjectInstanceOnSheet = {
+                                                    "IDENTIFICADOR": $savedGeneratedUniqKeyForSender,
+                                                    "TIENDA": $savedReferenceCurrentObject["cr"],
+                                                    "FECHA": "DATETIME",
+                                                    "SOLICITA": user!["displayName"],
+                                                    "GEOLOCALIZACIÓN": $savedReferenceCurrentObject["geo"] ? "Sí" : "No",
+                                                    "CÓDIGO POSTAL": $savedReferenceCurrentObject["postal"],
+                                                    "CALLE PRINCIPAL": $savedReferenceCurrentObject["street"],
+                                                    "REFERENCIAS": $savedReferenceCurrentObject["ref"],
+                                                    "NÚMERO EXTERIOR": $savedReferenceCurrentObject["exterior"],
+                                                    "COLONIA": $savedReferenceCurrentObject["colony"],
+                                                    "CIUDAD": $savedReferenceCurrentObject["city"],
+                                                    "MUNICIPIO": $savedReferenceCurrentObject["town"],
+                                                    "OBSERVACIONES": $savedReferenceCurrentObject["message"] ?? "Ninguna"
                                                 };
-                                                const {st} = (await Fetcher(3,"",instanceObjectSenderData,undefined,"post",{"Content-Type":"application/x-www-form-urlencoded"}));
-                                                if(st){
-                                                    const $requestedCurrentDocumentID = (await getDocs(query(collection(firebase!["database"],"address"),where("cr","==",cr),limit(1))));
-                                                    updateDoc(doc(firebase!["database"],`address/${$requestedCurrentDocumentID["docs"][0]["id"]}`),{uniqKey:$savedGeneratedUniqKeyForSender});
-                                                    let $savedReferenceCurrentItemContainer = item;
-                                                    $savedReferenceCurrentItemContainer[page - 1][index]["uniqKey"] = $savedGeneratedUniqKeyForSender;
-                                                    setSender(undefined);
-                                                }else setSender(undefined);
+                                                (await Fetcher(2,$savedReferenceDBSheetKeys["direcciones"]["key"],{data:[$definedSavedObjectInstanceOnSheet]},undefined,"post",{authorization:`Basic ${$savedReferenceDBSheetKeys["direcciones"]["token"]}`,"Content-Type":"application/json"}));
+                                                updateDoc(doc(firebase!["database"],`address/${$requestedCurrentDocumentID["docs"][0]["id"]}`),{uniqKey:$savedGeneratedUniqKeyForSender});
+                                                let $savedReferenceCurrentItemContainer = item;
+                                                $savedReferenceCurrentItemContainer[page - 1][index]["uniqKey"] = $savedGeneratedUniqKeyForSender;
+                                                setSender(undefined);
                                             }}>
                                                 <i className="uil uil-message"></i>
                                             </button>

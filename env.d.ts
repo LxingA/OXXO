@@ -18,12 +18,12 @@ interface ImportMetaEnv {
     SGlobAppParamCDNDomain: string,
     /** Ruta Absoluta HTTP del Punto Final de la Base de Datos en Tiempo Real de Firebase */
     SGlobAppParamRealTimeDatabaseDomain: string,
-    /** Definición de los Puntos Finales de las API (Logiwa,WC,SheetDB,GoogleSheet) con / */
+    /** Definición de los Puntos Finales de las API (Logiwa,WC,SheetDB) con / */
     SGlobAppParamDefinedEndPointAPI: string,
     /** Clave de Autenticación Básica a la API del WC (key:secret):Base64 */
     SGlobAppParamWCAuthToken: string,
-    /** Clave de Autenticación Básica para el Acceso a la API de SheetDB (key:secret):Base64 */
-    SGlobAppParamSheetDBAuthToken: string
+    /** Clave de Autenticación Básica para el Acceso a la API de SheetDB {name:{token:base64,key:stringIDAPI}} */
+    SGlobAppParamSheetDBKeys: string
 }
 interface ImportMeta {
     readonly env: ImportMetaEnv
